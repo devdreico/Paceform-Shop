@@ -16,7 +16,7 @@ const faqs = [
   {
     pregunta: "¿Cómo pago mi pedido?",
     respuesta:
-      "Puedes pagar contra entrega (en efectivo al recibir) o con Mercado Pago desde la ficha del producto. En Mercado Pago confirmamos el pago manualmente antes de despachar.",
+      "Pagas en efectivo cuando recibas tu pedido. El envío es gratis y te contactamos por WhatsApp para coordinar la entrega.",
   },
   {
     pregunta: "¿Necesito crear una cuenta para comprar?",
@@ -37,11 +37,6 @@ const faqs = [
     pregunta: "¿Hacen envíos a todo el país?",
     respuesta:
       "Sí, despachamos a capitales y municipios principales de Colombia con el mismo costo de envío: gratis.",
-  },
-  {
-    pregunta: "¿Cómo confirmo un pago con Mercado Pago?",
-    respuesta:
-      "Pagas en el link oficial de Mercado Pago y nos envías el comprobante por WhatsApp. Verificamos el pago y despachamos el pedido.",
   },
   {
     pregunta: "¿Los precios incluyen impuestos?",

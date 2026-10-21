@@ -1,21 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, Loader2, ShoppingBag } from "lucide-react";
+import { Banknote, Check, Loader2, ShoppingBag } from "lucide-react";
 import type { Producto } from "@/lib/tipos";
 import { useCarrito } from "@/lib/carrito";
 import { formatCOP } from "@/lib/formato";
 import Boton from "@/components/ui/boton";
-import MPModal from "./mp-modal";
 
 export default function SelectorProducto({
   producto,
   onColorChange,
+  onVariantChange,
 }: {
   producto: Producto;
   onColorChange?: (imagen?: string) => void;
+  onVariantChange?: (variante: { talla: string | null; color: string | null }) => void;
 }) {
-  const { agregar } = useCarrito();
+  const { agregar, setAbierto } = useCarrito();
   const [talla, setTalla] = useState<string | null>(
     producto.tallas.length === 1 ? producto.tallas[0] : null
   );
@@ -23,7 +24,6 @@ export default function SelectorProducto({
     producto.colores.length === 1 ? producto.colores[0].nombre : null
   );
   const [error, setError] = useState<string | null>(null);
-  const [mpAbierto, setMpAbierto] = useState(false);
   const [agregado, setAgregado] = useState(false);
 
   const requiereTalla = producto.tallas.length > 0;
@@ -33,6 +33,10 @@ export default function SelectorProducto({
     const c = producto.colores.find((x) => x.nombre === color);
     onColorChange?.(c?.imagen);
   }, [color, producto.colores, onColorChange]);
+
+  useEffect(() => {
+    onVariantChange?.({ talla, color });
+  }, [talla, color, onVariantChange]);
 
   function validar(): boolean {
     if (faltan) {
@@ -59,9 +63,15 @@ export default function SelectorProducto({
     setTimeout(() => setAgregado(false), 2000);
   }
 
-  function alPagarMP() {
+  function alComprarContraEntrega() {
     if (!validar()) return;
-    setMpAbierto(true);
+    agregar({
+      productoSlug: producto.slug,
+      talla: talla ?? "Única",
+      color: color ?? "Único",
+      cantidad: 1,
+    });
+    setAbierto(true);
   }
 
   return (
@@ -144,28 +154,13 @@ export default function SelectorProducto({
             </>
           )}
         </Boton>
-        <Boton
-          variant="mp"
-          onClick={alPagarMP}
-          disabled={faltan}
-          className="w-full py-4 text-base"
-        >
-          Pagar con Mercado Pago
+        <Boton onClick={alComprarContraEntrega} className="w-full py-4 text-base">
+          <Banknote className="size-5" /> Comprar contraentrega
         </Boton>
         <p className="text-xs text-ceniza text-center">
-          Mercado Pago: registras tus datos de envío y pagas con el link oficial.
-          Contra entrega: pagas al recibir el pedido.
+          Pagas en efectivo cuando recibas tu pedido.
         </p>
       </div>
-
-      {mpAbierto && talla !== undefined && color && (
-        <MPModal
-          producto={producto}
-          talla={talla ?? "Única"}
-          color={color}
-          onCerrar={() => setMpAbierto(false)}
-        />
-      )}
     </div>
   );
 }

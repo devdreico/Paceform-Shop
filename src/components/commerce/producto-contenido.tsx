@@ -9,7 +9,6 @@ import {
   Package,
   MessageCircle,
   RotateCcw,
-  Info,
   Check,
   Timer,
 } from "lucide-react";
@@ -19,7 +18,7 @@ import {
   categoriaPorSlug,
 } from "@/data/productos";
 import { formatCOP } from "@/lib/formato";
-import { ENVIO, WHATSAPP, MERCADO_PAGO } from "@/lib/config";
+import { ENVIO, WHATSAPP } from "@/lib/config";
 import SelectorProducto, {
   EstadoStock,
 } from "@/components/commerce/selector-producto";
@@ -31,7 +30,16 @@ import Badge from "@/components/ui/badge";
 
 export default function ProductoContenido({ slug }: { slug: string }) {
   const [imagenColor, setImagenColor] = useState<string | undefined>(undefined);
+  const [variante, setVariante] = useState<{
+    talla: string | null;
+    color: string | null;
+  }>({ talla: null, color: null });
   const onColorChange = useCallback((img?: string) => setImagenColor(img), []);
+  const onVariantChange = useCallback(
+    (seleccion: { talla: string | null; color: string | null }) =>
+      setVariante(seleccion),
+    []
+  );
   const irAlSelector = useCallback(() => {
     document
       .getElementById("selector-compra")
@@ -66,7 +74,7 @@ export default function ProductoContenido({ slug }: { slug: string }) {
 
   return (
     <>
-      <nav className="flex items-center gap-1.5 text-xs font-semibold text-ceniza mb-6 flex-wrap">
+      <nav className="mb-6 flex min-w-0 flex-wrap items-center gap-1.5 text-xs font-semibold text-ceniza">
         <Link href="/" className="hover:text-verde">
           Inicio
         </Link>
@@ -86,11 +94,11 @@ export default function ProductoContenido({ slug }: { slug: string }) {
           </>
         )}
         <ChevronRight className="size-3" />
-        <span className="text-carbon">{producto.nombre}</span>
+        <span className="min-w-0 break-words text-carbon">{producto.nombre}</span>
       </nav>
 
-      <div className="grid gap-10 lg:grid-cols-2">
-        <div className="lg:sticky lg:top-20 self-start">
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
+        <div className="min-w-0 self-start lg:sticky lg:top-20">
           <GaleriaProducto
             principal={producto.imagen}
             galeria={producto.galeria}
@@ -99,7 +107,7 @@ export default function ProductoContenido({ slug }: { slug: string }) {
           />
         </div>
 
-        <div>
+        <div className="min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
             <EstadoStock estado={producto.disponibilidad} />
             {producto.etiqueta && (
@@ -114,7 +122,7 @@ export default function ProductoContenido({ slug }: { slug: string }) {
             )}
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold mt-3 tracking-tight">
+          <h1 className="mt-3 break-words text-2xl font-extrabold tracking-tight sm:text-3xl">
             {producto.nombre}
           </h1>
           <p className="mt-2 text-sm text-ceniza">{producto.descripcionCorta}</p>
@@ -154,6 +162,7 @@ export default function ProductoContenido({ slug }: { slug: string }) {
             <SelectorProducto
               producto={producto}
               onColorChange={onColorChange}
+              onVariantChange={onVariantChange}
             />
           </div>
 
@@ -181,8 +190,8 @@ export default function ProductoContenido({ slug }: { slug: string }) {
                 {ENVIO.resto.dias}.
               </li>
               <li>
-                Pagas contra entrega al recibirla, o con Mercado Pago. Confirmamos
-                el pago de MP manualmente y despachamos.
+                Pagas en efectivo cuando recibas tu pedido. Te contactamos para
+                coordinar la entrega.
               </li>
             </ul>
           </GlassPanel>
@@ -235,28 +244,6 @@ export default function ProductoContenido({ slug }: { slug: string }) {
               ))}
             </ul>
           </div>
-
-          <GlassPanel className="mt-8 p-5">
-            <h2 className="text-sm font-extrabold inline-flex items-center gap-2">
-              <Info className="size-4 text-verde" /> Cómo pagar con Mercado Pago
-            </h2>
-            <ol className="mt-3 space-y-2 text-xs text-ceniza list-decimal list-inside">
-              <li>Elige talla y color, y pulsa «Pagar con Mercado Pago».</li>
-              <li>Registra tus datos de envío (llegan a nuestro pedido).</li>
-              <li>Se abre el link oficial de Mercado Pago.</li>
-              <li>
-                Paga el monto exacto con la referencia{" "}
-                <strong className="text-carbon">
-                  PACEFORM {producto.nombre}
-                </strong>
-                .
-              </li>
-              <li>Envíanos el comprobante por WhatsApp y confirmamos.</li>
-            </ol>
-            <p className="mt-3 text-[11px] text-ceniza">
-              Link de pago: {MERCADO_PAGO.linkGenerico}
-            </p>
-          </GlassPanel>
 
           <GlassPanel className="mt-4 p-5">
             <h2 className="text-sm font-extrabold inline-flex items-center gap-2">
@@ -354,7 +341,12 @@ export default function ProductoContenido({ slug }: { slug: string }) {
         </section>
       )}
 
-      <BarraCompraMovil producto={producto} onIntentar={irAlSelector} />
+      <BarraCompraMovil
+        producto={producto}
+        talla={variante.talla}
+        color={variante.color}
+        onIntentar={irAlSelector}
+      />
     </>
   );
 }

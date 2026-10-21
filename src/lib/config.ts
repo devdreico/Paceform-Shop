@@ -26,20 +26,8 @@ export const TIENDAS_FILIALES = [
   },
 ];
 
-export const MERCADO_PAGO = {
-  linkGenerico:
-    process.env.NEXT_PUBLIC_MP_LINK ??
-    "https://link.mercadopago.com.co/swholesales",
-  instrucciones: [
-    "Verifica el monto exacto del producto antes de pagar.",
-    "En el concepto o referencia escribe: PACEFORM + nombre del producto.",
-    "Envíanos el comprobante de pago por WhatsApp para confirmar tu pedido.",
-  ],
-};
-
 export const FORMSPREE = {
   contraEntrega: process.env.NEXT_PUBLIC_FORMSPREE_CONTRAENTREGA ?? "https://formspree.io/f/xnpjkgpa",
-  mercadoPago: process.env.NEXT_PUBLIC_FORMSPREE_MERCADOPAGO ?? "https://formspree.io/f/xrpewyew",
 };
 
 export const WHATSAPP = {

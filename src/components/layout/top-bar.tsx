@@ -15,7 +15,7 @@ const mensajes = [
   },
   {
     icon: ShieldCheck,
-    texto: "Contra entrega o Mercado Pago seguro",
+    texto: "Pagas en efectivo al recibir",
   },
 ];
 

@@ -403,8 +403,8 @@ export default function HomePage() {
           </span>
           <h3 className="text-base font-extrabold">Compra segura y transparente</h3>
           <p className="text-xs text-ceniza leading-relaxed">
-            Contra entrega o Mercado Pago. Envío gratis, precio final visible y
-            cambios con condiciones claras desde el primer clic.
+            Pagas al recibir. Envío gratis, precio final visible y cambios con
+            condiciones claras desde el primer clic.
           </p>
           <Link
             href="/envios-cambios"
@@ -446,7 +446,7 @@ export default function HomePage() {
       <section className="mx-auto max-w-7xl px-4 pb-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
           { icon: Truck, t: "Envío gratis", d: "Todo Colombia" },
-          { icon: ShieldCheck, t: "Pago seguro", d: "MP o contra entrega" },
+          { icon: ShieldCheck, t: "Pago contraentrega", d: "Efectivo al recibir" },
           { icon: RefreshCcw, t: "Cambios 5 días", d: "Por falla o error" },
           { icon: MessageCircle, t: "Soporte real", d: `WhatsApp ${WHATSAPP.visible}` },
         ].map(({ icon: Icon, t, d }) => (

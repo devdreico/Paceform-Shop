@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s · PACEFORM",
   },
   description:
-    "Equipamiento de running seleccionado para Colombia. Adidas Adizero y más. Envío gratis contra entrega o pago con Mercado Pago.",
+    "Equipamiento de running seleccionado para Colombia. Adidas Adizero y más. Envío gratis y pago contra entrega.",
   openGraph: {
     type: "website",
     locale: "es_CO",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     siteName: MARCA.nombre,
     title: "PACEFORM — Equipamiento para correr en Colombia",
     description:
-      "Equipamiento de running seleccionado para Colombia. Envío gratis contra entrega o Mercado Pago.",
+      "Equipamiento de running seleccionado para Colombia. Envío gratis y pago contra entrega.",
     images: [
       {
         url: `${SITE_URL}/og-paceform.png`,

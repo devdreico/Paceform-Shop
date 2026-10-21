@@ -51,7 +51,7 @@ export default function Footer() {
           </div>
           <p className="mt-4 text-sm text-white/70 max-w-sm leading-relaxed">
             Equipamiento de running seleccionado para Colombia. Envío gratis a
-            todo el país, contra entrega o pago seguro con Mercado Pago.
+            todo el país y pago en efectivo al recibir.
           </p>
           <div className="mt-5 flex items-center gap-3">
             <a

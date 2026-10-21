@@ -86,8 +86,8 @@ export default function TiendaPage() {
         </p>
         <h1 className="text-3xl sm:text-4xl font-extrabold mt-1">Tienda</h1>
         <p className="mt-2 text-sm text-ceniza max-w-xl">
-          Equipamiento de running seleccionado. Envío gratis a todo Colombia,
-          contra entrega o pago con Mercado Pago.
+          Equipamiento de running seleccionado. Envío gratis a todo Colombia y
+          pago contra entrega.
         </p>
       </div>
 

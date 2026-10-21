@@ -43,8 +43,8 @@ export default function EnviosPage() {
               monto mínimo.
             </li>
             <li>
-              Los tiempos se cuentan desde la confirmación del pedido (contra
-              entrega) o la confirmación del pago (Mercado Pago).
+              Los tiempos se cuentan desde la confirmación del pedido contra
+              entrega.
             </li>
           </ul>
         </GlassPanel>
@@ -83,26 +83,18 @@ export default function EnviosPage() {
               producto, salvo defecto comprobable.
             </li>
             <li>
-              Los reembolsos por Mercado Pago se procesan al recibir y verificar
-              el producto. En contra entrega, se emite nota crédito o cambio según
-              el caso.
+              En contra entrega, se emite nota crédito o cambio según el caso,
+              una vez recibido y verificado el producto.
             </li>
           </ul>
         </GlassPanel>
 
         <GlassPanel solido className="p-6">
           <h2 className="text-base font-extrabold inline-flex items-center gap-2">
-            <ShieldCheck className="size-4 text-verde" /> Métodos de pago
+            <ShieldCheck className="size-4 text-verde" /> Pago contraentrega
           </h2>
           <ul className="mt-3 space-y-2 text-sm text-carbon/80">
-            <li>
-              <strong>Contra entrega:</strong> pagas en efectivo al recibir el
-              pedido en tu dirección.
-            </li>
-            <li>
-              <strong>Mercado Pago:</strong> pagas con el link oficial; confirmamos
-              el pago manualmente y despachamos.
-            </li>
+            <li>Pagas en efectivo al recibir el pedido en tu dirección.</li>
           </ul>
         </GlassPanel>
 

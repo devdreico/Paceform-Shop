@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Suspense } from "react";
 import { CheckCircle2, Truck, MessageCircle, Home } from "lucide-react";
 import { formatCOP } from "@/lib/formato";
@@ -82,13 +81,6 @@ async function ContenidoExito({
         </p>
       </GlassPanel>
 
-      <p className="mt-6 text-center text-xs text-ceniza">
-        ¿Compraste con Mercado Pago? También registramos tu envío y confirmamos
-        el pago manualmente.{" "}
-        <Link href="/contacto" className="font-bold text-verde underline">
-          Contacto
-        </Link>
-      </p>
     </>
   );
 }

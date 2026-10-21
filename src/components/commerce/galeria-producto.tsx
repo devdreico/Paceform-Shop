@@ -16,15 +16,14 @@ export default function GaleriaProducto({
   imagenColor?: string;
 }) {
   const imagenes = galeria && galeria.length > 0 ? galeria : [principal];
-  const [activa, setActiva] = useState(
-    imagenColor && imagenes.includes(imagenColor) ? imagenColor : imagenes[0]
-  );
-  const [colorPrevio, setColorPrevio] = useState(imagenColor);
-
-  if (imagenColor !== colorPrevio) {
-    setColorPrevio(imagenColor);
-    if (imagenColor) setActiva(imagenColor);
-  }
+  const [imagenManual, setImagenManual] = useState<{
+    color: string | undefined;
+    src: string;
+  } | null>(null);
+  const activa =
+    imagenManual && imagenManual.color === imagenColor
+      ? imagenManual.src
+      : imagenColor ?? imagenes[0];
 
   const todas =
     imagenColor && !imagenes.includes(imagenColor)
@@ -32,8 +31,8 @@ export default function GaleriaProducto({
       : imagenes;
 
   return (
-    <div className="vidrio panel p-4">
-      <div className="relative rounded-[18px] overflow-hidden bg-humo aspect-[4/3]">
+    <div className="vidrio panel w-full min-w-0 max-w-full p-3 sm:p-4">
+      <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[18px] bg-humo sm:aspect-[5/4]">
         <Image
           key={activa}
           src={activa}
@@ -45,19 +44,20 @@ export default function GaleriaProducto({
         />
       </div>
       {todas.length > 1 && (
-        <div className="mt-3 flex gap-2 overflow-x-auto scroll-oculto pb-1">
+        <div className="mt-3 flex max-w-full gap-2 overflow-x-auto scroll-oculto pb-1">
           {todas.map((img, i) => (
             <button
               key={img + i}
               type="button"
-              onClick={() => setActiva(img)}
+              onClick={() => setImagenManual({ color: imagenColor, src: img })}
               className={cn(
-                "relative size-16 rounded-xl overflow-hidden bg-humo shrink-0 border-[2px] transition-colors",
+                "relative size-14 shrink-0 overflow-hidden rounded-xl border-[2px] bg-humo transition-colors sm:size-16",
                 activa === img
                   ? "border-verde"
                   : "border-transparent hover:border-verde/30"
               )}
               aria-label={`Ver imagen ${i + 1}`}
+              aria-pressed={activa === img}
             >
               <Image
                 src={img}

@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 type Props = {
   href?: string;
   onClick?: () => void;
-  variant?: "primario" | "secundario" | "mp" | "claro";
+  variant?: "primario" | "secundario" | "claro";
   className?: string;
   children: React.ReactNode;
   type?: "button" | "submit";
@@ -16,7 +16,6 @@ type Props = {
 const variantes = {
   primario: "btn-primario",
   secundario: "btn-secundario",
-  mp: "btn-mp",
   claro:
     "bg-white text-verde border-[1.5px] border-white rounded-full font-bold hover:bg-verde-50 transition-colors",
 };

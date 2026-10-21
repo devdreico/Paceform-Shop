@@ -93,7 +93,6 @@ export const productos: Producto[] = [
       { nombre: "Blanco", hex: "#F5F5F5", imagen: "/productos/adidas-adizero/blanco.webp" },
       { nombre: "Blanco tricolor", hex: "#E8E8E8", imagen: "/productos/adidas-adizero/blanco-tricolor.webp" },
     ],
-    mercadopagoUrl: "https://mpago.li/2NDp5uf",
     disponibilidad: "en-stock",
     imagen: "/productos/adidas-adizero/gris-negro.webp",
     galeria: [
@@ -136,7 +135,6 @@ export const productos: Producto[] = [
     colores: [
       { nombre: "Void Eclipse Undyed White", hex: "#E8E6E1" },
     ],
-    mercadopagoUrl: "https://mpago.li/1ZDXkai",
     disponibilidad: "en-stock",
     imagen: "/productos/on-running-cloudnova/main.webp",
     galeria: [
@@ -180,7 +178,6 @@ export const productos: Producto[] = [
     complementarios: ["adidas-adizero", "on-running-cloudnova", "rinonera-impermeable-celular"],
     tallas: [],
     colores: [{ nombre: "Negro", hex: "#111111" }],
-    mercadopagoUrl: "https://mpago.li/2PWTKip",
     disponibilidad: "en-stock",
     imagen: "/productos/rinonera-on-cloud/main.webp",
     galeria: [
@@ -220,7 +217,6 @@ export const productos: Producto[] = [
     complementarios: ["adidas-adizero", "rinonera-on-cloud", "soporte-tobillo-elastico"],
     tallas: [],
     colores: [{ nombre: "Negro", hex: "#111111" }],
-    mercadopagoUrl: "https://mpago.li/1PMo4xs",
     disponibilidad: "en-stock",
     imagen: "/productos/rinonera-impermeable/main.webp",
     galeria: [
@@ -268,7 +264,6 @@ export const productos: Producto[] = [
       { nombre: "Rosado", hex: "#DB2777" },
       { nombre: "Negro", hex: "#111111" },
     ],
-    mercadopagoUrl: "https://mpago.li/2PWTKip",
     disponibilidad: "en-stock",
     imagen: "/productos/bolso-fitness/main.webp",
     galeria: [
@@ -325,7 +320,6 @@ export const productos: Producto[] = [
     colores: [
       { nombre: "Color sujeto a disponibilidad", hex: "#374151" },
     ],
-    mercadopagoUrl: "https://mpago.li/32LG2TC",
     disponibilidad: "en-stock",
     imagen: "/productos/camara-action-4k/main.webp",
     galeria: [
@@ -367,7 +361,6 @@ export const productos: Producto[] = [
     complementarios: ["adidas-adizero", "creatina-zamia-nutra-300"],
     tallas: [],
     colores: [{ nombre: "Negro", hex: "#111111" }],
-    mercadopagoUrl: "https://mpago.li/1NUfv7k",
     disponibilidad: "en-stock",
     imagen: "/productos/soporte-tobillo/main.webp",
     galeria: [
@@ -412,7 +405,6 @@ export const productos: Producto[] = [
     colores: [
       { nombre: "Vainilla / Fresa / Chocolate (sujeto a stock)", hex: "#F5F5F5" },
     ],
-    mercadopagoUrl: "https://mpago.li/1W3tAQC",
     disponibilidad: "en-stock",
     imagen: "/productos/smart-bar-protein/main.webp",
     galeria: [
@@ -456,7 +448,6 @@ export const productos: Producto[] = [
     complementarios: ["mass-evolution-3200", "creatina-elite-micronizada-300", "smart-bar-protein"],
     tallas: [],
     colores: [{ nombre: "Cookies n Cream", hex: "#3F3F46" }],
-    mercadopagoUrl: "https://mpago.li/2GqLCNE",
     disponibilidad: "en-stock",
     imagen: "/productos/mass-evolution/main-1900.webp",
     galeria: [
@@ -493,7 +484,6 @@ export const productos: Producto[] = [
     complementarios: ["mass-evolution-1900", "creatina-elite-micronizada-300"],
     tallas: [],
     colores: [{ nombre: "Cookies n Cream", hex: "#3F3F46" }],
-    mercadopagoUrl: "https://mpago.li/1XeuMgZ",
     disponibilidad: "en-stock",
     imagen: "/productos/mass-evolution/main.webp",
     galeria: [
@@ -533,7 +523,6 @@ export const productos: Producto[] = [
     complementarios: ["creatina-elite-micronizada-300", "mass-evolution-1900"],
     tallas: [],
     colores: [{ nombre: "Neutro", hex: "#E5E7EB" }],
-    mercadopagoUrl: "https://mpago.li/1Psb9Wu",
     disponibilidad: "en-stock",
     imagen: "/productos/creatina-zamia/main.webp",
   },
@@ -569,7 +558,6 @@ export const productos: Producto[] = [
     complementarios: ["creatina-zamia-nutra-300", "mass-evolution-3200", "shilajit-whey-protein-900"],
     tallas: [],
     colores: [{ nombre: "Premium", hex: "#1F2937" }],
-    mercadopagoUrl: "https://mpago.li/1KanoC9",
     disponibilidad: "en-stock",
     imagen: "/productos/creatina-elite/main.webp",
   },
@@ -606,7 +594,6 @@ export const productos: Producto[] = [
     complementarios: ["shilajit-whey-protein-x2", "creatina-elite-micronizada-300", "smart-bar-protein"],
     tallas: [],
     colores: [{ nombre: "Vainilla natural", hex: "#FDE68A" }],
-    mercadopagoUrl: "https://mpago.li/17ifNgd",
     disponibilidad: "en-stock",
     imagen: "/productos/shilajit-whey/main.webp",
   },
@@ -642,7 +629,6 @@ export const productos: Producto[] = [
     complementarios: ["shilajit-whey-protein-900", "creatina-elite-micronizada-300"],
     tallas: [],
     colores: [{ nombre: "Vainilla natural", hex: "#FDE68A" }],
-    mercadopagoUrl: "https://mpago.li/2xkWRdK",
     disponibilidad: "en-stock",
     imagen: "/productos/shilajit-whey-x2/main.webp",
   },

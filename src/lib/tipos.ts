@@ -25,7 +25,6 @@ export type Producto = {
   galeria?: string[];
   etiqueta?: string;
   notaCompra?: string;
-  mercadopagoUrl?: string;
 };
 
 export type Categoria = {

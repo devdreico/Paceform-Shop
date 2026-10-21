@@ -5,8 +5,7 @@ import { formatCOP } from "./formato";
 
 function construirPayload(
   items: ItemCarrito[],
-  envio: DatosEnvio,
-  metodo: "contra-entrega" | "mercado-pago"
+  envio: DatosEnvio
 ) {
   const total = items.reduce((acc, item) => {
     const prod = productoPorSlug(item.productoSlug);
@@ -23,8 +22,8 @@ function construirPayload(
     .join("\n");
 
   return {
-    _subject: `PACEFORM - Pedido ${metodo === "contra-entrega" ? "contra entrega" : "Mercado Pago"} - ${envio.nombre}`,
-    metodo_pago: metodo === "contra-entrega" ? "Contra entrega" : "Mercado Pago (pendiente de confirmación manual)",
+    _subject: `PACEFORM - Pedido contra entrega - ${envio.nombre}`,
+    metodo_pago: "Contra entrega en efectivo",
     nombre: envio.nombre,
     telefono: envio.telefono,
     email: envio.email || "—",
@@ -45,27 +44,12 @@ export async function enviarContraEntrega(
   envio: DatosEnvio
 ) {
   if (items.length === 0) throw new Error("El carrito está vacío");
-  const payload = construirPayload(items, envio, "contra-entrega");
+  const payload = construirPayload(items, envio);
   const res = await fetch(FORMSPREE.contraEntrega, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error("No fue posible registrar el pedido");
-  return res;
-}
-
-export async function enviarMercadoPago(
-  items: ItemCarrito[],
-  envio: DatosEnvio
-) {
-  if (items.length === 0) throw new Error("No hay productos");
-  const payload = construirPayload(items, envio, "mercado-pago");
-  const res = await fetch(FORMSPREE.mercadoPago, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) throw new Error("No fue posible registrar los datos de envío");
   return res;
 }

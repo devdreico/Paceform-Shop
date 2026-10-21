@@ -10,10 +10,14 @@ import { cn } from "@/lib/cn";
 
 export default function BarraCompraMovil({
   producto,
+  talla,
+  color,
   requerido = false,
   onIntentar,
 }: {
   producto: Producto;
+  talla: string | null;
+  color: string | null;
   requerido?: boolean;
   onIntentar?: () => void;
 }) {
@@ -23,12 +27,8 @@ export default function BarraCompraMovil({
   const [rebotar, setRebotar] = useState(false);
   const anterior = useRef(totalArticulos);
 
-  const tallaUnica =
-    producto.tallas.length === 1 ? producto.tallas[0] : null;
-  const colorUnico =
-    producto.colores.length === 1 ? producto.colores[0].nombre : null;
   const faltaSeleccion =
-    (producto.tallas.length > 0 && !tallaUnica) || !colorUnico;
+    (producto.tallas.length > 0 && !talla) || !color;
 
   function alAgregar() {
     if (requerido || faltaSeleccion) {
@@ -41,8 +41,8 @@ export default function BarraCompraMovil({
     }
     agregar({
       productoSlug: producto.slug,
-      talla: tallaUnica ?? "Única",
-      color: colorUnico ?? "Único",
+      talla: talla ?? "Única",
+      color: color ?? "Único",
       cantidad: 1,
     });
     setAbierto(true);
