@@ -458,10 +458,9 @@ export const productos: Producto[] = [
     colores: [{ nombre: "Cookies n Cream", hex: "#3F3F46" }],
     mercadopagoUrl: "https://mpago.li/2GqLCNE",
     disponibilidad: "en-stock",
-    imagen: "/productos/mass-evolution/main.webp",
+    imagen: "/productos/mass-evolution/main-1900.webp",
     galeria: [
-      "/productos/mass-evolution/main.webp",
-      "/productos/mass-evolution/gallery-1.webp",
+      "/productos/mass-evolution/main-1900.webp",
       "/productos/mass-evolution/gallery-2.webp",
     ],
   },
