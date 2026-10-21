@@ -89,7 +89,11 @@ export default function CheckoutPage() {
       </p>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_340px] lg:items-start">
-        <form id="checkout-form" onSubmit={alEnviar} className="space-y-5">
+        <form
+          id="checkout-form"
+          onSubmit={alEnviar}
+          className="order-2 lg:order-1 space-y-5"
+        >
           <GlassPanel solido className="p-6">
             <h2 className="text-base font-extrabold inline-flex items-center gap-2">
               <ShieldCheck className="size-4 text-verde" /> Datos de contacto
@@ -103,7 +107,7 @@ export default function CheckoutPage() {
                   required
                   value={datos.nombre}
                   onChange={(e) => set("nombre", e.target.value)}
-                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-sm font-medium outline-none focus:border-verde"
+                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
               <label className="block">
@@ -115,7 +119,7 @@ export default function CheckoutPage() {
                   type="tel"
                   value={datos.telefono}
                   onChange={(e) => set("telefono", e.target.value)}
-                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-sm font-medium outline-none focus:border-verde"
+                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
               <label className="block">
@@ -127,7 +131,7 @@ export default function CheckoutPage() {
                   type="email"
                   value={datos.email}
                   onChange={(e) => set("email", e.target.value)}
-                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-sm font-medium outline-none focus:border-verde"
+                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
             </div>
@@ -152,7 +156,7 @@ export default function CheckoutPage() {
                   value={datos.ciudad}
                   onChange={(e) => set("ciudad", e.target.value)}
                   placeholder="Ej: Bogotá, Medellín, Pasto…"
-                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-sm font-medium outline-none focus:border-verde"
+                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
               <label className="block">
@@ -161,7 +165,7 @@ export default function CheckoutPage() {
                   required
                   value={datos.barrio}
                   onChange={(e) => set("barrio", e.target.value)}
-                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-sm font-medium outline-none focus:border-verde"
+                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
               <label className="block sm:col-span-2">
@@ -173,7 +177,7 @@ export default function CheckoutPage() {
                   value={datos.direccion}
                   onChange={(e) => set("direccion", e.target.value)}
                   placeholder="Calle, número, apartamento, referencias"
-                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-sm font-medium outline-none focus:border-verde"
+                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
               <label className="block sm:col-span-2">
@@ -185,7 +189,7 @@ export default function CheckoutPage() {
                   value={datos.notas}
                   onChange={(e) => set("notas", e.target.value)}
                   placeholder="Horario preferido, portería, etc."
-                  className="mt-1 w-full px-4 py-3 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-sm font-medium outline-none focus:border-verde resize-none"
+                  className="mt-1 w-full px-4 py-3 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde resize-none"
                 />
               </label>
             </div>
@@ -198,7 +202,11 @@ export default function CheckoutPage() {
           )}
 
           <div className="lg:hidden">
-            <Boton type="submit" disabled={cargando} className="w-full py-4 text-base">
+            <Boton
+              type="submit"
+              disabled={cargando}
+              className="w-full py-4 min-h-14 text-base"
+            >
               {cargando ? (
                 <>
                   <Loader2 className="size-4 animate-spin" /> Registrando pedido…
@@ -212,7 +220,7 @@ export default function CheckoutPage() {
           </div>
         </form>
 
-        <GlassPanel solido className="p-6 sticky top-24">
+        <GlassPanel solido className="order-1 lg:order-2 p-6 lg:sticky lg:top-20">
           <h2 className="text-base font-extrabold">Tu pedido</h2>
           <ul className="mt-4 space-y-3">
             {items.map((item, i) => {
@@ -259,7 +267,12 @@ export default function CheckoutPage() {
           </p>
 
           <div className="hidden lg:block mt-5">
-            <Boton type="submit" form="checkout-form" disabled={cargando} className="w-full py-4">
+            <Boton
+              type="submit"
+              form="checkout-form"
+              disabled={cargando}
+              className="w-full py-4 min-h-14 text-base"
+            >
               {cargando ? (
                 <>
                   <Loader2 className="size-4 animate-spin" /> Registrando…

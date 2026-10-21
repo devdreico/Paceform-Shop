@@ -71,7 +71,7 @@ export default function CarritoPage() {
                     <button
                       type="button"
                       onClick={() => quitar(i)}
-                      className="p-2 text-carbon/50 hover:text-carbon"
+                      className="p-3 min-w-11 min-h-11 size-11 rounded-full flex items-center justify-center text-carbon/50 hover:text-carbon hover:bg-humo transition-colors"
                       aria-label="Quitar producto"
                     >
                       <Trash2 className="size-4" />
@@ -82,10 +82,10 @@ export default function CarritoPage() {
                       <button
                         type="button"
                         onClick={() => cambiarCantidad(i, item.cantidad - 1)}
-                        className="size-9 rounded-full bg-white border-[1.5px] border-vidrio-borde flex items-center justify-center"
+                        className="p-3 min-w-11 min-h-11 size-11 rounded-full bg-white border-[1.5px] border-vidrio-borde flex items-center justify-center hover:bg-verde-50 transition-colors"
                         aria-label="Restar"
                       >
-                        <Minus className="size-3.5" />
+                        <Minus className="size-4" />
                       </button>
                       <span className="text-sm font-bold w-6 text-center">
                         {item.cantidad}
@@ -93,10 +93,10 @@ export default function CarritoPage() {
                       <button
                         type="button"
                         onClick={() => cambiarCantidad(i, item.cantidad + 1)}
-                        className="size-9 rounded-full bg-white border-[1.5px] border-vidrio-borde flex items-center justify-center"
+                        className="p-3 min-w-11 min-h-11 size-11 rounded-full bg-white border-[1.5px] border-vidrio-borde flex items-center justify-center hover:bg-verde-50 transition-colors"
                         aria-label="Sumar"
                       >
-                        <Plus className="size-3.5" />
+                        <Plus className="size-4" />
                       </button>
                     </div>
                     <p className="text-sm font-extrabold text-verde">
@@ -109,7 +109,7 @@ export default function CarritoPage() {
           })}
         </div>
 
-        <GlassPanel solido className="p-6 sticky top-24">
+        <GlassPanel solido className="p-6 lg:sticky lg:top-20">
           <h2 className="text-base font-extrabold">Resumen</h2>
           <div className="mt-4 space-y-2.5 text-sm">
             <div className="flex justify-between">

@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { MessageCircle, Mail, MapPin, Clock } from "lucide-react";
-import { WHATSAPP } from "@/lib/config";
+import { MessageCircle, Mail, MapPin, Clock, ArrowRight } from "lucide-react";
+import { WHATSAPP, INSTAGRAM } from "@/lib/config";
 import GlassPanel from "@/components/ui/glass-panel";
 import Boton from "@/components/ui/boton";
+import IconoInstagram from "@/components/ui/icono-instagram";
 
 export const metadata = {
   title: "Contacto",
@@ -27,6 +28,9 @@ export default function ContactoPage() {
             <MessageCircle className="size-5" />
           </span>
           <h2 className="text-base font-extrabold">WhatsApp</h2>
+          <p className="text-xs font-semibold text-ceniza">
+            {WHATSAPP.visible}
+          </p>
           <p className="text-xs text-ceniza leading-relaxed">
             El canal más rápido. Incluye el nombre del producto o tu número de
             pedido para agilizar la respuesta.
@@ -57,6 +61,30 @@ export default function ContactoPage() {
             hola@paceform.co
           </a>
         </GlassPanel>
+
+        <a
+          href={INSTAGRAM.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-verde text-blanco panel tarjeta-hover p-6 flex flex-col gap-3 sm:col-span-2"
+        >
+          <div className="flex items-start gap-4">
+            <span className="size-11 rounded-2xl bg-white/15 flex items-center justify-center shrink-0">
+              <IconoInstagram className="size-5" />
+            </span>
+            <div>
+              <h2 className="text-base font-extrabold">@{INSTAGRAM.usuario}</h2>
+              <p className="text-xs text-white/70 leading-relaxed mt-1">
+                Lanzamientos, tips de entrenamiento y contenido de la comunidad
+                PACEFORM. Escríbenos por mensaje directo o síguenos para ver el
+                equipamiento en acción.
+              </p>
+            </div>
+          </div>
+          <span className="text-sm font-bold inline-flex items-center gap-1 mt-auto">
+            Seguir en Instagram <ArrowRight className="size-3.5 flecha-slide" />
+          </span>
+        </a>
 
         <GlassPanel solido className="p-6 flex flex-col gap-3 sm:col-span-2">
           <div className="flex items-start gap-4">

@@ -1,3 +1,6 @@
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://paceform.presentto.online";
+
 export const MARCA = {
   nombre: "PACEFORM",
   tagline: "RUNNING EQUIPMENT",
@@ -38,9 +41,15 @@ export const FORMSPREE = {
 };
 
 export const WHATSAPP = {
-  numero: "573000000000",
+  numero: "573144572008",
+  visible: "314 457 2008",
   mensaje:
     "Hola PACEFORM, necesito ayuda con un producto o mi pedido.",
+};
+
+export const INSTAGRAM = {
+  usuario: "paceform.shop",
+  url: "https://instagram.com/paceform.shop",
 };
 
 export const ENVIO = {

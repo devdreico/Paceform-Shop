@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X, ExternalLink, Loader2, CheckCircle2 } from "lucide-react";
 import type { DatosEnvio, Producto } from "@/lib/tipos";
 import { MERCADO_PAGO, diasEstimados } from "@/lib/config";
@@ -33,6 +33,11 @@ export default function MPModal({
   });
 
   const link = producto.mercadopagoUrl ?? MERCADO_PAGO.linkGenerico;
+
+  useEffect(() => {
+    document.body.classList.add("scroll-bloqueado");
+    return () => document.body.classList.remove("scroll-bloqueado");
+  }, []);
 
   async function alEnviar(e: React.FormEvent) {
     e.preventDefault();
@@ -68,7 +73,7 @@ export default function MPModal({
           required={requerido}
           value={datos[clave]}
           onChange={(e) => setDatos({ ...datos, [clave]: e.target.value })}
-          className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-sm font-medium outline-none focus:border-verde"
+          className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
         />
       </label>
     );
@@ -96,7 +101,7 @@ export default function MPModal({
         </div>
 
         {paso === "datos" ? (
-          <form onSubmit={alEnviar} className="p-5 space-y-4">
+          <form onSubmit={alEnviar} className="p-5 space-y-4 safe-area-pb">
             <div className="vidrio panel p-4">
               <p className="text-sm font-extrabold">{producto.nombre}</p>
               <p className="text-xs text-ceniza mt-0.5">
@@ -153,7 +158,7 @@ export default function MPModal({
             </p>
           </form>
         ) : (
-          <div className="p-8 text-center space-y-4">
+          <div className="p-8 pb-12 text-center space-y-4 safe-area-pb">
             <CheckCircle2 className="size-12 text-verde mx-auto" />
             <h3 className="text-xl font-extrabold">Datos registrados</h3>
             <p className="text-sm text-ceniza max-w-sm mx-auto">

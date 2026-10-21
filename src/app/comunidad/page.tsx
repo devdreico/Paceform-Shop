@@ -1,10 +1,11 @@
-import { Users, MessageCircle, ShieldAlert } from "lucide-react";
+import { Users, MessageCircle, ArrowRight } from "lucide-react";
 import { hilos } from "@/data/comunidad";
-import { WHATSAPP } from "@/lib/config";
+import { WHATSAPP, INSTAGRAM } from "@/lib/config";
 import { fechaLegible } from "@/lib/formato";
 import GlassPanel from "@/components/ui/glass-panel";
 import Badge from "@/components/ui/badge";
 import Boton from "@/components/ui/boton";
+import IconoInstagram from "@/components/ui/icono-instagram";
 
 export const metadata = {
   title: "Comunidad",
@@ -28,9 +29,6 @@ export default function ComunidadPage() {
             pregunta por equipamiento y entrena acompañado.
           </p>
         </div>
-        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#FFF3C4] text-carbon text-[11px] font-bold uppercase tracking-wide">
-          <ShieldAlert className="size-3.5" /> Contenido de demostración
-        </span>
       </div>
 
       <div className="mt-8 space-y-4">
@@ -118,6 +116,43 @@ export default function ComunidadPage() {
           <MessageCircle className="size-4" /> Unirme por WhatsApp
         </Boton>
       </GlassPanel>
+
+      {/* Enlaces directos: Instagram + WhatsApp */}
+      <div className="mt-4 grid sm:grid-cols-2 gap-4">
+        <a
+          href={INSTAGRAM.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-verde text-blanco panel tarjeta-hover p-5 flex items-center gap-3"
+        >
+          <span className="size-11 rounded-2xl bg-white/15 flex items-center justify-center shrink-0">
+            <IconoInstagram className="size-5" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-sm font-extrabold">@{INSTAGRAM.usuario}</p>
+            <p className="text-[11px] text-white/70">Síguenos en Instagram</p>
+          </div>
+          <ArrowRight className="size-4 flecha-slide ml-auto shrink-0" />
+        </a>
+
+        <a
+          href={`https://wa.me/${WHATSAPP.numero}?text=${encodeURIComponent(
+            "Hola PACEFORM, quiero unirme a la comunidad de corredores."
+          )}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="vidrio panel tarjeta-hover p-5 flex items-center gap-3"
+        >
+          <span className="size-11 rounded-2xl bg-verde text-blanco flex items-center justify-center shrink-0">
+            <MessageCircle className="size-5" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-sm font-extrabold">WhatsApp {WHATSAPP.visible}</p>
+            <p className="text-[11px] text-ceniza">Respuesta en horario hábil</p>
+          </div>
+          <ArrowRight className="size-4 text-verde flecha-slide ml-auto shrink-0" />
+        </a>
+      </div>
     </div>
   );
 }

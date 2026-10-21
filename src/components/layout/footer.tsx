@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Camera, MessageCircle, Mail } from "lucide-react";
-import { WHATSAPP } from "@/lib/config";
+import { MessageCircle, Mail } from "lucide-react";
+import { WHATSAPP, INSTAGRAM } from "@/lib/config";
+import IconoInstagram from "@/components/ui/icono-instagram";
 
 const columnas = [
   {
@@ -34,7 +35,7 @@ const columnas = [
 
 export default function Footer() {
   return (
-    <footer className="bg-carbon text-blanco mt-16">
+    <footer className="bg-carbon text-blanco mt-16 pb-20 md:pb-0">
       <div className="mx-auto max-w-7xl px-4 py-14 grid gap-10 md:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <div className="bg-blanco rounded-2xl inline-flex px-4 py-3">
@@ -56,18 +57,18 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               className="vidrio-oscuro panel size-11 flex items-center justify-center text-blanco hover:bg-white/15 transition-colors"
-              aria-label="WhatsApp"
+              aria-label={`WhatsApp ${WHATSAPP.visible}`}
             >
               <MessageCircle className="size-5" />
             </a>
             <a
-              href="https://instagram.com"
+              href={INSTAGRAM.url}
               target="_blank"
               rel="noopener noreferrer"
               className="vidrio-oscuro panel size-11 flex items-center justify-center text-blanco hover:bg-white/15 transition-colors"
-              aria-label="Instagram"
+              aria-label={`Instagram ${INSTAGRAM.usuario}`}
             >
-              <Camera className="size-5" />
+              <IconoInstagram className="size-5" />
             </a>
             <a
               href="mailto:hola@paceform.co"
@@ -77,6 +78,9 @@ export default function Footer() {
               <Mail className="size-5" />
             </a>
           </div>
+          <p className="mt-3 text-xs text-white/45">
+            @{INSTAGRAM.usuario} · WhatsApp {WHATSAPP.visible}
+          </p>
         </div>
 
         {columnas.map((col) => (

@@ -15,23 +15,30 @@ export default function GaleriaProducto({
   imagenColor?: string;
 }) {
   const imagenes = galeria && galeria.length > 0 ? galeria : [principal];
-  const activaInicial = imagenColor
-    ? imagenes.find((i) => i === imagenColor) ?? imagenes[0]
-    : imagenes[0];
-  const [activa, setActiva] = useState(activaInicial);
+  const [activa, setActiva] = useState(
+    imagenColor && imagenes.includes(imagenColor) ? imagenColor : imagenes[0]
+  );
+  const [colorPrevio, setColorPrevio] = useState(imagenColor);
 
-  const todas = imagenColor && !imagenes.includes(imagenColor)
-    ? [imagenColor, ...imagenes]
-    : imagenes;
+  if (imagenColor !== colorPrevio) {
+    setColorPrevio(imagenColor);
+    if (imagenColor) setActiva(imagenColor);
+  }
+
+  const todas =
+    imagenColor && !imagenes.includes(imagenColor)
+      ? [imagenColor, ...imagenes]
+      : imagenes;
 
   return (
     <div className="vidrio panel p-4">
       <div className="rounded-[18px] overflow-hidden bg-humo aspect-[4/3]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
+          key={activa}
           src={activa}
           alt={alt}
-          className="w-full h-full object-cover animar-entrada"
+          className="w-full h-full object-cover crossfade-img"
         />
       </div>
       {todas.length > 1 && (
@@ -43,7 +50,9 @@ export default function GaleriaProducto({
               onClick={() => setActiva(img)}
               className={cn(
                 "size-16 rounded-xl overflow-hidden bg-humo shrink-0 border-[2px] transition-colors",
-                activa === img ? "border-verde" : "border-transparent hover:border-verde/30"
+                activa === img
+                  ? "border-verde"
+                  : "border-transparent hover:border-verde/30"
               )}
               aria-label={`Ver imagen ${i + 1}`}
             >

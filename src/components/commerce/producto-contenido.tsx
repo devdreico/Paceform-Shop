@@ -11,6 +11,7 @@ import {
   RotateCcw,
   Info,
   Check,
+  Timer,
 } from "lucide-react";
 import {
   productos,
@@ -23,15 +24,32 @@ import SelectorProducto, {
   EstadoStock,
 } from "@/components/commerce/selector-producto";
 import GaleriaProducto from "@/components/commerce/galeria-producto";
+import BarraCompraMovil from "@/components/commerce/barra-compra-movil";
 import ProductCard from "@/components/commerce/product-card";
 import GlassPanel from "@/components/ui/glass-panel";
+import Badge from "@/components/ui/badge";
 
 export default function ProductoContenido({ slug }: { slug: string }) {
   const [imagenColor, setImagenColor] = useState<string | undefined>(undefined);
   const onColorChange = useCallback((img?: string) => setImagenColor(img), []);
+  const irAlSelector = useCallback(() => {
+    document
+      .getElementById("selector-compra")
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, []);
 
   const producto = productoPorSlug(slug);
   if (!producto) return null;
+
+  const confianza = [
+    { icon: Truck, t: "Envío gratis" },
+    { icon: ShieldCheck, t: "Contra entrega" },
+    { icon: Package, t: "1–4 días según ciudad" },
+    { icon: RotateCcw, t: "Cambios 5 días" },
+    ...(producto.notaCompra?.includes("24")
+      ? [{ icon: Timer, t: "Despacho 24 h" }]
+      : []),
+  ];
 
   const categoria = categoriaPorSlug(producto.categoriaSlug);
   const complementarios = producto.complementarios
@@ -72,7 +90,7 @@ export default function ProductoContenido({ slug }: { slug: string }) {
       </nav>
 
       <div className="grid gap-10 lg:grid-cols-2">
-        <div className="lg:sticky lg:top-24 self-start">
+        <div className="lg:sticky lg:top-20 self-start">
           <GaleriaProducto
             principal={producto.imagen}
             galeria={producto.galeria}
@@ -96,40 +114,43 @@ export default function ProductoContenido({ slug }: { slug: string }) {
             )}
           </div>
 
-          <h1 className="text-3xl sm:text-4xl font-extrabold mt-3 tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold mt-3 tracking-tight">
             {producto.nombre}
           </h1>
           <p className="mt-2 text-sm text-ceniza">{producto.descripcionCorta}</p>
 
           <div className="mt-5 flex items-end gap-3 flex-wrap">
-            <p className="text-3xl font-extrabold text-verde">
+            <p className="block text-3xl sm:text-4xl font-extrabold text-verde">
               {formatCOP(producto.precio)}
             </p>
             {producto.precioAntes && (
-              <p className="text-lg font-bold text-ceniza line-through">
+              <p className="text-base sm:text-lg font-bold text-ceniza line-through">
                 {formatCOP(producto.precioAntes)}
               </p>
+            )}
+            {producto.precioAntes && producto.precioAntes > producto.precio && (
+              <Badge tono="amarillo">
+                -{Math.round((1 - producto.precio / producto.precioAntes) * 100)}
+                %
+              </Badge>
             )}
           </div>
           <p className="text-xs text-ceniza mt-1">
             Precio final · envío gratis · impuestos incluidos
           </p>
 
-          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-carbon">
-            <span className="inline-flex items-center gap-1.5">
-              <Truck className="size-4 text-verde" /> Envío gratis
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="size-4 text-verde" /> Contra entrega
-              disponible
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Package className="size-4 text-verde" /> Entrega 1–4 días según
-              ciudad
-            </span>
+          <div className="mt-4 vidrio panel px-4 py-3 flex flex-wrap gap-x-4 gap-y-2">
+            {confianza.map(({ icon: Icon, t }) => (
+              <span
+                key={t}
+                className="inline-flex items-center gap-1.5 text-[11px] font-bold text-carbon"
+              >
+                <Icon className="size-3.5 text-verde" /> {t}
+              </span>
+            ))}
           </div>
 
-          <div className="mt-8">
+          <div className="mt-8" id="selector-compra">
             <SelectorProducto
               producto={producto}
               onColorChange={onColorChange}
@@ -332,6 +353,8 @@ export default function ProductoContenido({ slug }: { slug: string }) {
           </div>
         </section>
       )}
+
+      <BarraCompraMovil producto={producto} onIntentar={irAlSelector} />
     </>
   );
 }

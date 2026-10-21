@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
 import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { useCarrito, totalDe } from "@/lib/carrito";
 import { productoPorSlug } from "@/data/productos";
@@ -17,6 +18,12 @@ export default function CartDrawer() {
     subtotal,
     listo,
   } = useCarrito();
+
+  useEffect(() => {
+    if (!listo || !abierto) return;
+    document.body.classList.add("scroll-bloqueado");
+    return () => document.body.classList.remove("scroll-bloqueado");
+  }, [abierto, listo]);
 
   if (!listo || !abierto) return null;
 
@@ -81,10 +88,10 @@ export default function CartDrawer() {
                         <button
                           type="button"
                           onClick={() => cambiarCantidad(i, item.cantidad - 1)}
-                          className="size-8 rounded-full bg-white border-[1.5px] border-vidrio-borde flex items-center justify-center"
+                          className="size-11 rounded-full bg-white border-[1.5px] border-vidrio-borde flex items-center justify-center"
                           aria-label="Restar"
                         >
-                          <Minus className="size-3.5" />
+                          <Minus className="size-4" />
                         </button>
                         <span className="text-sm font-bold w-5 text-center">
                           {item.cantidad}
@@ -92,15 +99,15 @@ export default function CartDrawer() {
                         <button
                           type="button"
                           onClick={() => cambiarCantidad(i, item.cantidad + 1)}
-                          className="size-8 rounded-full bg-white border-[1.5px] border-vidrio-borde flex items-center justify-center"
+                          className="size-11 rounded-full bg-white border-[1.5px] border-vidrio-borde flex items-center justify-center"
                           aria-label="Sumar"
                         >
-                          <Plus className="size-3.5" />
+                          <Plus className="size-4" />
                         </button>
                         <button
                           type="button"
                           onClick={() => quitar(i)}
-                          className="ml-auto p-2 text-carbon/50 hover:text-carbon"
+                          className="ml-auto size-11 flex items-center justify-center rounded-full text-carbon/50 hover:text-carbon hover:bg-verde-50"
                           aria-label="Quitar"
                         >
                           <Trash2 className="size-4" />
@@ -112,7 +119,7 @@ export default function CartDrawer() {
               })}
             </div>
 
-            <div className="px-5 py-4 vidrio-solido border-t border-vidrio-borde space-y-3">
+            <div className="px-5 pt-4 safe-area-pb vidrio-solido border-t border-vidrio-borde space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-ceniza font-semibold">Subtotal</span>
                 <span className="font-extrabold">{formatCOP(subtotal)}</span>

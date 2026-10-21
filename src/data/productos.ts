@@ -96,16 +96,17 @@ export const productos: Producto[] = [
       { nombre: "Blanco", hex: "#F5F5F5", imagen: "/productos/adidas-adizero/blanco.png" },
       { nombre: "Blanco tricolor", hex: "#E8E8E8", imagen: "/productos/adidas-adizero/blanco-tricolor.png" },
     ],
+    mercadopagoUrl: "https://mpago.li/2NDp5uf",
     disponibilidad: "en-stock",
-    imagen: "/productos/adidas-adizero/main.webp",
+    imagen: "/productos/adidas-adizero/gris-negro.png",
     galeria: [
-      "/productos/adidas-adizero/main.webp",
-      "/productos/adidas-adizero/verde-neon.webp",
       "/productos/adidas-adizero/gris-negro.png",
+      "/productos/adidas-adizero/verde-neon.webp",
       "/productos/adidas-adizero/azul.webp",
       "/productos/adidas-adizero/negro.webp",
       "/productos/adidas-adizero/blanco.png",
       "/productos/adidas-adizero/blanco-tricolor.png",
+      "/productos/adidas-adizero/main.webp",
     ],
     notaCompra: "145.000 COP por par en cualquier presentación.",
   },
@@ -142,6 +143,7 @@ export const productos: Producto[] = [
     colores: [
       { nombre: "Void Eclipse Undyed White", hex: "#E8E6E1" },
     ],
+    mercadopagoUrl: "https://mpago.li/1ZDXkai",
     disponibilidad: "en-stock",
     imagen: "/productos/on-running-cloudnova/main.jpg",
     galeria: [
@@ -185,6 +187,7 @@ export const productos: Producto[] = [
     complementarios: ["adidas-adizero", "on-running-cloudnova", "rinonera-impermeable-celular"],
     tallas: [],
     colores: [{ nombre: "Negro", hex: "#111111" }],
+    mercadopagoUrl: "https://mpago.li/2PWTKip",
     disponibilidad: "en-stock",
     imagen: "/productos/rinonera-on-cloud/main.jpg",
     galeria: [
@@ -224,6 +227,7 @@ export const productos: Producto[] = [
     complementarios: ["adidas-adizero", "rinonera-on-cloud", "soporte-tobillo-elastico"],
     tallas: [],
     colores: [{ nombre: "Negro", hex: "#111111" }],
+    mercadopagoUrl: "https://mpago.li/1PMo4xs",
     disponibilidad: "en-stock",
     imagen: "/productos/rinonera-impermeable/main.jpg",
     galeria: [
@@ -237,15 +241,15 @@ export const productos: Producto[] = [
   },
   {
     slug: "bolso-fitness-multifuncional",
-    nombre: "Maleta Fitness Impermeable 35 L",
+    nombre: "Bolso deportivo FITNESS",
     categoriaSlug: "accesorios",
     uso: ["gimnasio", "viajes", "deporte diario"],
     precio: 79000,
     etiqueta: "Unisex",
     descripcionCorta:
-      "Maleta deportiva impermeable de 35 L para gimnasio o viajes. Lona de nylon resistente, soporta 15–20 kg. Unisex.",
+      "Bolso deportivo FITNESS impermeable de 35 L para gimnasio o viajes. Lona de nylon resistente, soporta 15–20 kg. Unisex.",
     descripcion:
-      "Maleta impermeable para gimnasio y viajes unisex, con 35 litros de capacidad y dimensiones 31 × 53,5 × 31 cm. Fabricada en lona de nylon resistente al uso diario; soporta entre 15 y 20 kg (no recomendada para herramientas). Diseño moderno versátil para el gimnasio, escapadas de fin de semana o como bolsa diaria. Tu equipo, seco y protegido en cualquier clima.",
+      "Bolso deportivo FITNESS impermeable para gimnasio y viajes unisex, con 35 litros de capacidad y dimensiones 31 × 53,5 × 31 cm. Fabricada en lona de nylon resistente al uso diario; soporta entre 15 y 20 kg (no recomendada para herramientas). Diseño moderno versátil para el gimnasio, escapadas de fin de semana o como bolsa diaria. Tu equipo, seco y protegido en cualquier clima.",
     especificaciones: [
       { etiqueta: "Capacidad", valor: "35 litros" },
       { etiqueta: "Dimensiones", valor: "31 × 53,5 × 31 cm" },
@@ -271,6 +275,7 @@ export const productos: Producto[] = [
       { nombre: "Rosado", hex: "#DB2777" },
       { nombre: "Negro", hex: "#111111" },
     ],
+    mercadopagoUrl: "https://mpago.li/2PWTKip",
     disponibilidad: "en-stock",
     imagen: "/productos/bolso-fitness/main.jpg",
     galeria: [
@@ -327,6 +332,7 @@ export const productos: Producto[] = [
     colores: [
       { nombre: "Color sujeto a disponibilidad", hex: "#374151" },
     ],
+    mercadopagoUrl: "https://mpago.li/32LG2TC",
     disponibilidad: "en-stock",
     imagen: "/productos/camara-action-4k/main.jpg",
     galeria: [
@@ -368,6 +374,7 @@ export const productos: Producto[] = [
     complementarios: ["adidas-adizero", "creatina-zamia-nutra-300"],
     tallas: [],
     colores: [{ nombre: "Negro", hex: "#111111" }],
+    mercadopagoUrl: "https://mpago.li/1NUfv7k",
     disponibilidad: "en-stock",
     imagen: "/productos/soporte-tobillo/main.jpg",
     galeria: [
@@ -412,6 +419,7 @@ export const productos: Producto[] = [
     colores: [
       { nombre: "Vainilla / Fresa / Chocolate (sujeto a stock)", hex: "#F5F5F5" },
     ],
+    mercadopagoUrl: "https://mpago.li/1W3tAQC",
     disponibilidad: "en-stock",
     imagen: "/productos/smart-bar-protein/main.jpg",
     galeria: [
@@ -455,6 +463,7 @@ export const productos: Producto[] = [
     complementarios: ["mass-evolution-3200", "creatina-elite-micronizada-300", "smart-bar-protein"],
     tallas: [],
     colores: [{ nombre: "Cookies n Cream", hex: "#3F3F46" }],
+    mercadopagoUrl: "https://mpago.li/2GqLCNE",
     disponibilidad: "en-stock",
     imagen: "/productos/mass-evolution/main.jpg",
     galeria: [
@@ -492,6 +501,7 @@ export const productos: Producto[] = [
     complementarios: ["mass-evolution-1900", "creatina-elite-micronizada-300"],
     tallas: [],
     colores: [{ nombre: "Cookies n Cream", hex: "#3F3F46" }],
+    mercadopagoUrl: "https://mpago.li/1XeuMgZ",
     disponibilidad: "en-stock",
     imagen: "/productos/mass-evolution/main.jpg",
     galeria: [
@@ -506,31 +516,32 @@ export const productos: Producto[] = [
     categoriaSlug: "nutricion",
     uso: ["fuerza", "rendimiento", "recuperación"],
     precio: 28000,
-    etiqueta: "Alta pureza",
+    etiqueta: "100% pura",
     descripcionCorta:
-      "Creatina monohidratada de alta pureza Zamia Nutra 300 g. Fuerza, potencia y recuperación en polvo de rápida disolución.",
+      "Creatina monohidratada 100% pura Zamia Nutra 300 g. Sin rellenos ni aditivos innecesarios: fuerza, potencia y recuperación en polvo de rápida disolución.",
     descripcion:
-      "La Creatina Monohidratada Zamia Nutra es un suplemento deportivo de alta pureza para mejorar el rendimiento físico, aumentar la fuerza y optimizar la recuperación muscular. Fórmula premium con excelente solubilidad y rápida absorción. Mezclar una porción en agua o bebida de preferencia antes o después del entrenamiento, según tu rutina.",
+      "La Creatina Monohidratada Zamia Nutra es creatina 100% pura, sin mezclas ni rellenos. Un suplemento deportivo de alta pureza para mejorar el rendimiento físico, aumentar la fuerza y optimizar la recuperación muscular. Fórmula premium con excelente solubilidad y rápida absorción. Mezclar una porción en agua o bebida de preferencia antes o después del entrenamiento, según tu rutina.",
     especificaciones: [
       { etiqueta: "Contenido neto", valor: "300 g" },
       { etiqueta: "Formato", valor: "Polvo de rápida disolución" },
       { etiqueta: "Tipo", valor: "Creatina monohidratada" },
-      { etiqueta: "Pureza", valor: "Alta · fórmula premium" },
+      { etiqueta: "Pureza", valor: "100% pura · sin rellenos" },
       { etiqueta: "Uso", valor: "Suplemento deportivo de uso diario" },
     ],
     beneficios: [
+      "100% creatina pura, sin aditivos innecesarios",
       "Aumenta la fuerza y potencia muscular",
       "Mejora el rendimiento deportivo",
       "Favorece el crecimiento de masa muscular",
       "Reduce la fatiga y acelera la recuperación",
-      "Excelente solubilidad y absorción",
     ],
     contenidoPaquete: ["1 envase Creatina Monohidratada Zamia Nutra 300 g"],
     porQueElegimos:
-      "Creatina monohidratada pura a un precio de entrada: el suplemento con más evidencia científica, sin pagar de más por la marca.",
+      "Creatina monohidratada 100% pura a un precio de entrada: el suplemento con más evidencia científica, sin pagar de más por rellenos ni marketing.",
     complementarios: ["creatina-elite-micronizada-300", "mass-evolution-1900"],
     tallas: [],
     colores: [{ nombre: "Neutro", hex: "#E5E7EB" }],
+    mercadopagoUrl: "https://mpago.li/1Psb9Wu",
     disponibilidad: "en-stock",
     imagen: "/productos/creatina-zamia/main.jpg",
   },
@@ -540,31 +551,33 @@ export const productos: Producto[] = [
     categoriaSlug: "nutricion",
     uso: ["fuerza", "rendimiento", "recuperación"],
     precio: 50000,
-    etiqueta: "Grado premium",
+    etiqueta: "Micronizada premium",
     descripcionCorta:
-      "Creatina monohidratada Elite micronizada 300 g: alta pureza, excelente biodisponibilidad y disolución instantánea.",
+      "Creatina monohidratada micronizada Elite 300 g: alta pureza, excelente biodisponibilidad y disolución instantánea.",
     descripcion:
-      "La Creatina Monohidratada Elite es un suplemento premium para potenciar el rendimiento físico, aumentar la fuerza y mejorar la recuperación. Fórmula de alta pureza con micronizado que garantiza absorción eficiente y disolución rápida. Ideal para deportistas que buscan maximizar su desempeño en cada entrenamiento.",
+      "La Creatina Monohidratada Elite es un suplemento premium con textura micronizada —partículas más finas para absorción superior y disolución instantánea, sin grumos—. Potencia el rendimiento físico, aumenta la fuerza y mejora la recuperación. Fórmula de alta pureza ideal para deportistas que buscan maximizar su desempeño en cada entrenamiento.",
     especificaciones: [
       { etiqueta: "Contenido neto", valor: "300 g" },
       { etiqueta: "Formato", valor: "Polvo micronizado de rápida disolución" },
       { etiqueta: "Tipo", valor: "Creatina monohidratada grado premium" },
+      { etiqueta: "Textura", valor: "Micronizada · partículas ultrafinas" },
       { etiqueta: "Biodisponibilidad", valor: "Alta" },
       { etiqueta: "Uso", valor: "Suplemento deportivo de uso diario" },
     ],
     beneficios: [
+      "Micronizada para absorción y disolución superiores",
       "Incrementa la fuerza y potencia muscular",
       "Mejora el rendimiento en entrenamientos de alta intensidad",
       "Acelera la recuperación muscular",
       "Favorece el aumento de masa muscular",
-      "Micronizada para absorción superior",
     ],
     contenidoPaquete: ["1 envase Creatina Monohidratada Elite 300 g"],
     porQueElegimos:
-      "Para quien prioriza pureza y solubilidad: grado premium micronizado, el escalón de arriba de la creatina estándar.",
+      "Calidad micronizada real: partículas ultrafinas que se disuelven sin grumos y se absorben mejor que la creatina estándar.",
     complementarios: ["creatina-zamia-nutra-300", "mass-evolution-3200", "shilajit-whey-protein-900"],
     tallas: [],
     colores: [{ nombre: "Premium", hex: "#1F2937" }],
+    mercadopagoUrl: "https://mpago.li/1KanoC9",
     disponibilidad: "en-stock",
     imagen: "/productos/creatina-elite/main.jpg",
   },
@@ -601,6 +614,7 @@ export const productos: Producto[] = [
     complementarios: ["shilajit-whey-protein-x2", "creatina-elite-micronizada-300", "smart-bar-protein"],
     tallas: [],
     colores: [{ nombre: "Vainilla natural", hex: "#FDE68A" }],
+    mercadopagoUrl: "https://mpago.li/17ifNgd",
     disponibilidad: "en-stock",
     imagen: "/productos/shilajit-whey/main.jpg",
   },
@@ -636,6 +650,7 @@ export const productos: Producto[] = [
     complementarios: ["shilajit-whey-protein-900", "creatina-elite-micronizada-300"],
     tallas: [],
     colores: [{ nombre: "Vainilla natural", hex: "#FDE68A" }],
+    mercadopagoUrl: "https://mpago.li/2xkWRdK",
     disponibilidad: "en-stock",
     imagen: "/productos/shilajit-whey-x2/main.jpg",
   },

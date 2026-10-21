@@ -6,9 +6,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Search, ShoppingBag, Menu, X, ExternalLink, Newspaper, BookOpen, Users } from "lucide-react";
 import { useCarrito } from "@/lib/carrito";
-import { TIENDAS_FILIALES } from "@/lib/config";
+import { TIENDAS_FILIALES, INSTAGRAM } from "@/lib/config";
 import { cn } from "@/lib/cn";
 import Buscador from "@/components/commerce/buscador";
+import IconoInstagram from "@/components/ui/icono-instagram";
 
 const enlaces = [
   { href: "/tienda", label: "Tienda" },
@@ -39,9 +40,11 @@ export default function Header() {
         <div className="mx-auto max-w-7xl px-4 h-16 flex items-center gap-3">
           <button
             type="button"
-            className="lg:hidden p-2 -ml-2 text-carbon"
+            className="lg:hidden p-3 -ml-3 text-carbon"
             onClick={() => setMenuMovil((v) => !v)}
             aria-label={menuMovil ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={menuMovil}
+            aria-controls="menu-movil"
           >
             {menuMovil ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -93,6 +96,16 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-1">
+            <a
+              href={INSTAGRAM.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex p-2.5 text-carbon hover:bg-verde-50 rounded-full transition-colors"
+              aria-label={`Instagram ${INSTAGRAM.usuario}`}
+              title={`@${INSTAGRAM.usuario}`}
+            >
+              <IconoInstagram className="size-5" />
+            </a>
             <button
               type="button"
               onClick={() => setBusquedaAbierta(true)}
@@ -118,7 +131,10 @@ export default function Header() {
         </div>
 
         {menuMovil && (
-          <div className="lg:hidden border-t border-vidrio-borde px-4 py-3 animar-entrada">
+          <div
+            id="menu-movil"
+            className="lg:hidden border-t border-vidrio-borde px-4 py-3 max-h-[calc(100dvh-64px)] overflow-y-auto animar-entrada"
+          >
             <nav className="flex flex-col gap-1">
               {enlaces.map((e) => (
                 <Link
@@ -141,7 +157,7 @@ export default function Header() {
                 Finalizar compra
               </Link>
             </nav>
-            <div className="mt-3 grid grid-cols-2 gap-2">
+            <div className="mt-3 grid grid-cols-3 gap-2">
               {TIENDAS_FILIALES.map((t) => (
                 <a
                   key={t.nombre}
@@ -154,6 +170,15 @@ export default function Header() {
                   {t.nombre}
                 </a>
               ))}
+              <a
+                href={INSTAGRAM.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="vidrio panel flex flex-col items-center gap-1 py-3 text-[11px] font-semibold text-carbon"
+              >
+                <IconoInstagram className="size-4 text-verde" />
+                Instagram
+              </a>
             </div>
             <div className="mt-2 grid grid-cols-3 gap-2">
               {[

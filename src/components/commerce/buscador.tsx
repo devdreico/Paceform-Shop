@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, X, Package } from "lucide-react";
 import { buscarProductos, categorias } from "@/data/productos";
 import { formatCOP } from "@/lib/formato";
@@ -9,6 +9,11 @@ import Link from "next/link";
 export default function Buscador({ onCerrar }: { onCerrar: () => void }) {
   const [q, setQ] = useState("");
   const resultados = useMemo(() => buscarProductos(q), [q]);
+
+  useEffect(() => {
+    document.body.classList.add("scroll-bloqueado");
+    return () => document.body.classList.remove("scroll-bloqueado");
+  }, []);
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4">
@@ -26,12 +31,12 @@ export default function Buscador({ onCerrar }: { onCerrar: () => void }) {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Buscar por nombre, categoría o uso…"
-            className="flex-1 bg-transparent outline-none text-sm font-medium placeholder:text-ceniza"
+            className="flex-1 min-w-0 bg-transparent outline-none text-base sm:text-sm font-medium placeholder:text-ceniza"
           />
           <button
             type="button"
             onClick={onCerrar}
-            className="p-1.5 hover:bg-verde-50 rounded-full"
+            className="shrink-0 p-2.5 -mr-2 hover:bg-verde-50 rounded-full"
             aria-label="Cerrar"
           >
             <X className="size-4" />
@@ -77,7 +82,7 @@ export default function Buscador({ onCerrar }: { onCerrar: () => void }) {
               key={p.slug}
               href={`/tienda/${p.slug}`}
               onClick={onCerrar}
-              className="flex items-center gap-4 px-5 py-4 hover:bg-verde-50 transition-colors border-b border-vidrio-borde last:border-0"
+              className="flex items-center gap-4 px-5 py-4 min-h-14 hover:bg-verde-50 transition-colors border-b border-vidrio-borde last:border-0"
             >
               <div className="size-14 rounded-2xl bg-humo shrink-0 overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}

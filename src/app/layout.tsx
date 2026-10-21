@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/carrito";
@@ -6,6 +6,8 @@ import TopBar from "@/components/layout/top-bar";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import CartDrawer from "@/components/commerce/cart-drawer";
+import WhatsAppFlotante from "@/components/layout/whatsapp-flotante";
+import { SITE_URL, MARCA } from "@/lib/config";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -13,13 +15,52 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700", "800"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#063D2E",
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "PACEFORM — Equipamiento para correr en Colombia",
     template: "%s · PACEFORM",
   },
   description:
     "Equipamiento de running seleccionado para Colombia. Adidas Adizero y más. Envío gratis contra entrega o pago con Mercado Pago.",
+  openGraph: {
+    type: "website",
+    locale: "es_CO",
+    url: SITE_URL,
+    siteName: MARCA.nombre,
+    title: "PACEFORM — Equipamiento para correr en Colombia",
+    description:
+      "Equipamiento de running seleccionado para Colombia. Envío gratis contra entrega o Mercado Pago.",
+    images: [
+      {
+        url: `${SITE_URL}/og-paceform.png`,
+        width: 1200,
+        height: 630,
+        alt: "PACEFORM — MEJOR EQUIPAMIENTO. MÁS KILÓMETROS.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PACEFORM — Equipamiento para correr en Colombia",
+    description:
+      "Equipamiento de running seleccionado para Colombia. Envío gratis contra entrega.",
+    images: [`${SITE_URL}/og-paceform.png`],
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png" }],
+  },
 };
 
 export default function RootLayout({
@@ -36,6 +77,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <CartDrawer />
+          <WhatsAppFlotante />
         </CartProvider>
       </body>
     </html>
