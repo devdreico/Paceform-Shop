@@ -4,12 +4,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Search, ShoppingBag, Menu, X, ExternalLink, Newspaper, BookOpen, Users } from "lucide-react";
+import { Search, ShoppingBag, Menu, X, ExternalLink, Leaf, Bike } from "lucide-react";
 import { useCarrito } from "@/lib/carrito";
 import { TIENDAS_FILIALES, INSTAGRAM } from "@/lib/config";
 import { cn } from "@/lib/cn";
 import Buscador from "@/components/commerce/buscador";
 import IconoInstagram from "@/components/ui/icono-instagram";
+
+const iconosFiliales = { natural: Leaf, ciclismo: Bike } as const;
 
 const enlaces = [
   { href: "/tienda", label: "Tienda" },
@@ -79,20 +81,27 @@ export default function Header() {
 
           <div className="flex-1 lg:hidden" />
 
-          <div className="hidden xl:flex items-center gap-1 shrink-0">
-            {TIENDAS_FILIALES.map((t) => (
-              <a
-                key={t.nombre}
-                href={t.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold text-verde bg-verde-50 hover:bg-verde-100 transition-colors whitespace-nowrap"
-                title={t.descripcion}
-              >
-                {t.nombre}
-                <ExternalLink className="size-3" />
-              </a>
-            ))}
+          <div className="hidden lg:flex items-center gap-1 shrink-0">
+            {TIENDAS_FILIALES.map((t) => {
+              const Icono = iconosFiliales[t.tipo] ?? ExternalLink;
+              return (
+                <a
+                  key={t.nombre}
+                  href={t.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold text-verde bg-verde-50 hover:bg-verde-100 transition-colors whitespace-nowrap"
+                  title={t.descripcion}
+                >
+                  <Icono className="size-3.5" />
+                  {t.nombre}
+                  <span className="hidden xl:inline text-verde/60 font-semibold">
+                    · {t.etiqueta}
+                  </span>
+                  <ExternalLink className="size-3 opacity-50" />
+                </a>
+              );
+            })}
           </div>
 
           <div className="flex items-center gap-1">
@@ -141,7 +150,7 @@ export default function Header() {
                   key={e.href}
                   href={e.href}
                   className={cn(
-                    "px-4 py-3 rounded-2xl text-sm font-semibold",
+                    "px-4 py-3 rounded-2xl text-sm font-semibold min-h-11 flex items-center",
                     pathname === e.href
                       ? "bg-verde text-blanco"
                       : "text-carbon hover:bg-verde-50"
@@ -152,49 +161,48 @@ export default function Header() {
               ))}
               <Link
                 href="/checkout"
-                className="px-4 py-3 rounded-2xl text-sm font-semibold text-carbon hover:bg-verde-50"
+                className="px-4 py-3 rounded-2xl text-sm font-semibold text-carbon hover:bg-verde-50 min-h-11 flex items-center"
               >
                 Finalizar compra
               </Link>
             </nav>
-            <div className="mt-3 grid grid-cols-3 gap-2">
-              {TIENDAS_FILIALES.map((t) => (
-                <a
-                  key={t.nombre}
-                  href={t.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="vidrio panel flex flex-col items-center gap-1 py-3 text-[11px] font-semibold text-carbon"
-                >
-                  <ExternalLink className="size-4 text-verde" />
-                  {t.nombre}
-                </a>
-              ))}
+
+            <p className="mt-4 mb-2 px-1 text-[10px] font-bold uppercase tracking-wide text-ceniza">
+              Nuestras tiendas
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {TIENDAS_FILIALES.map((t) => {
+                const Icono = iconosFiliales[t.tipo] ?? ExternalLink;
+                return (
+                  <a
+                    key={t.nombre}
+                    href={t.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="vidrio panel flex flex-col gap-1 py-3 px-3 text-carbon min-h-11"
+                  >
+                    <span className="inline-flex items-center gap-1.5 text-xs font-extrabold">
+                      <Icono className="size-4 text-verde" />
+                      {t.nombre}
+                    </span>
+                    <span className="text-[10px] text-ceniza leading-tight">
+                      {t.etiqueta}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+
+            <div className="mt-2">
               <a
                 href={INSTAGRAM.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="vidrio panel flex flex-col items-center gap-1 py-3 text-[11px] font-semibold text-carbon"
+                className="vidrio panel flex items-center gap-2 py-3 px-3 text-carbon min-h-11 text-xs font-extrabold"
               >
                 <IconoInstagram className="size-4 text-verde" />
-                Instagram
+                @{INSTAGRAM.usuario}
               </a>
-            </div>
-            <div className="mt-2 grid grid-cols-3 gap-2">
-              {[
-                { icon: Newspaper, label: "Noticias", href: "/noticias" },
-                { icon: BookOpen, label: "Wiki", href: "/wiki" },
-                { icon: Users, label: "Comunidad", href: "/comunidad" },
-              ].map(({ icon: Icon, label, href }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="vidrio panel flex flex-col items-center gap-1 py-3 text-[11px] font-semibold text-carbon"
-                >
-                  <Icon className="size-4 text-verde" />
-                  {label}
-                </Link>
-              ))}
             </div>
           </div>
         )}

@@ -1,9 +1,13 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { MessageCircle } from "lucide-react";
 import { WHATSAPP } from "@/lib/config";
 
 export default function WhatsAppFlotante({ oculto = false }: { oculto?: boolean }) {
+  const pathname = usePathname();
+  const enFicha = pathname.startsWith("/tienda/") && pathname !== "/tienda";
+
   if (oculto) return null;
 
   return (
@@ -14,7 +18,11 @@ export default function WhatsAppFlotante({ oculto = false }: { oculto?: boolean 
       target="_blank"
       rel="noopener noreferrer"
       className="fixed right-5 z-30 btn-primario size-14 flex items-center justify-center"
-      style={{ bottom: "calc(1.25rem + env(safe-area-inset-bottom, 0px))" }}
+      style={{
+        bottom: enFicha
+          ? "calc(5rem + env(safe-area-inset-bottom, 0px))"
+          : "calc(1.25rem + env(safe-area-inset-bottom, 0px))",
+      }}
       aria-label={`Escribir por WhatsApp al ${WHATSAPP.visible}`}
       title={`WhatsApp ${WHATSAPP.visible}`}
     >

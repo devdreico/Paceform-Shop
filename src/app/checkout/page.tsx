@@ -1,31 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Truck, ShieldCheck, Banknote } from "lucide-react";
 import { useCarrito, totalDe } from "@/lib/carrito";
 import { productoPorSlug } from "@/data/productos";
 import { formatCOP } from "@/lib/formato";
 import { enviarContraEntrega } from "@/lib/formspree";
-import { diasEstimados } from "@/lib/config";
 import type { DatosEnvio } from "@/lib/tipos";
 import Boton from "@/components/ui/boton";
 import GlassPanel from "@/components/ui/glass-panel";
+import CampoCiudad from "@/components/commerce/campo-ciudad";
+
+const CLAVE_ENVIO = "paceform-envio";
+
+const VACIO: DatosEnvio = {
+  nombre: "",
+  telefono: "",
+  email: "",
+  ciudad: "",
+  direccion: "",
+  barrio: "",
+  notas: "",
+};
 
 export default function CheckoutPage() {
   const { items, subtotal, listo, vaciar } = useCarrito();
   const router = useRouter();
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [datos, setDatos] = useState<DatosEnvio>({
-    nombre: "",
-    telefono: "",
-    email: "",
-    ciudad: "",
-    direccion: "",
-    barrio: "",
-    notas: "",
-  });
+  const [datos, setDatos] = useState<DatosEnvio>(VACIO);
+  const [hidratado, setHidratado] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      try {
+        const raw = localStorage.getItem(CLAVE_ENVIO);
+        if (raw) setDatos({ ...VACIO, ...JSON.parse(raw) });
+      } catch {
+        /* ignorar */
+      }
+      setHidratado(true);
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  useEffect(() => {
+    if (!hidratado) return;
+    try {
+      localStorage.setItem(CLAVE_ENVIO, JSON.stringify(datos));
+    } catch {
+      /* ignorar */
+    }
+  }, [datos, hidratado]);
 
   function set(clave: keyof DatosEnvio, valor: string) {
     setDatos((d) => ({ ...d, [clave]: valor }));
@@ -39,6 +66,11 @@ export default function CheckoutPage() {
     try {
       await enviarContraEntrega(items, datos);
       vaciar();
+      try {
+        localStorage.removeItem(CLAVE_ENVIO);
+      } catch {
+        /* ignorar */
+      }
       const params = new URLSearchParams({
         nombre: datos.nombre,
         ciudad: datos.ciudad,
@@ -78,7 +110,7 @@ export default function CheckoutPage() {
   const total = totalDe(items);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10">
+    <div className="mx-auto max-w-5xl px-4 py-10 pb-28 lg:pb-10">
       <p className="text-xs font-bold uppercase tracking-wide text-verde">
         Checkout · Contra entrega
       </p>
@@ -107,6 +139,9 @@ export default function CheckoutPage() {
                   required
                   value={datos.nombre}
                   onChange={(e) => set("nombre", e.target.value)}
+                  name="nombre"
+                  autoComplete="name"
+                  enterKeyHint="next"
                   className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
@@ -119,18 +154,27 @@ export default function CheckoutPage() {
                   type="tel"
                   value={datos.telefono}
                   onChange={(e) => set("telefono", e.target.value)}
+                  name="telefono"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  enterKeyHint="next"
+                  placeholder="300 123 4567"
                   className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
               <label className="block">
                 <span className="text-xs font-bold text-ceniza">
-                  Correo electrónico *
+                  Correo electrónico (opcional)
                 </span>
                 <input
-                  required
                   type="email"
                   value={datos.email}
                   onChange={(e) => set("email", e.target.value)}
+                  name="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  enterKeyHint="next"
+                  placeholder="tu@correo.com"
                   className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
@@ -141,30 +185,17 @@ export default function CheckoutPage() {
             <h2 className="text-base font-extrabold inline-flex items-center gap-2">
               <Truck className="size-4 text-verde" /> Dirección de envío
             </h2>
-            <p className="mt-1 text-xs text-ceniza">
-              Envío gratis. Tiempo estimado:{" "}
-              <strong className="text-carbon">
-                {datos.ciudad ? diasEstimados(datos.ciudad) : "1 a 4 días hábiles"}
-              </strong>{" "}
-              según ciudad.
-            </p>
             <div className="mt-4 grid sm:grid-cols-2 gap-3">
-              <label className="block">
-                <span className="text-xs font-bold text-ceniza">Ciudad *</span>
-                <input
-                  required
-                  value={datos.ciudad}
-                  onChange={(e) => set("ciudad", e.target.value)}
-                  placeholder="Ej: Bogotá, Medellín, Pasto…"
-                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
-                />
-              </label>
+              <CampoCiudad valor={datos.ciudad} onChange={(v) => set("ciudad", v)} />
               <label className="block">
                 <span className="text-xs font-bold text-ceniza">Barrio *</span>
                 <input
                   required
                   value={datos.barrio}
                   onChange={(e) => set("barrio", e.target.value)}
+                  name="barrio"
+                  autoComplete="address-level3"
+                  enterKeyHint="next"
                   className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
@@ -177,6 +208,9 @@ export default function CheckoutPage() {
                   value={datos.direccion}
                   onChange={(e) => set("direccion", e.target.value)}
                   placeholder="Calle, número, apartamento, referencias"
+                  name="direccion"
+                  autoComplete="street-address"
+                  enterKeyHint="done"
                   className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
               </label>
@@ -189,6 +223,7 @@ export default function CheckoutPage() {
                   value={datos.notas}
                   onChange={(e) => set("notas", e.target.value)}
                   placeholder="Horario preferido, portería, etc."
+                  name="notas"
                   className="mt-1 w-full px-4 py-3 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde resize-none"
                 />
               </label>
@@ -200,24 +235,6 @@ export default function CheckoutPage() {
               {error}
             </p>
           )}
-
-          <div className="lg:hidden">
-            <Boton
-              type="submit"
-              disabled={cargando}
-              className="w-full py-4 min-h-14 text-base"
-            >
-              {cargando ? (
-                <>
-                  <Loader2 className="size-4 animate-spin" /> Registrando pedido…
-                </>
-              ) : (
-                <>
-                  <Banknote className="size-5" /> Confirmar pedido contra entrega
-                </>
-              )}
-            </Boton>
-          </div>
         </form>
 
         <GlassPanel solido className="order-1 lg:order-2 p-6 lg:sticky lg:top-20">
@@ -283,6 +300,26 @@ export default function CheckoutPage() {
             </Boton>
           </div>
         </GlassPanel>
+      </div>
+
+      {/* CTA sticky móvil */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 vidrio-solido border-t border-verde/12 safe-area-pb px-4 pt-3">
+        <Boton
+          type="submit"
+          form="checkout-form"
+          disabled={cargando}
+          className="w-full py-4 min-h-14 text-base"
+        >
+          {cargando ? (
+            <>
+              <Loader2 className="size-4 animate-spin" /> Registrando pedido…
+            </>
+          ) : (
+            <>
+              <Banknote className="size-5" /> Confirmar · {formatCOP(total)}
+            </>
+          )}
+        </Boton>
       </div>
     </div>
   );

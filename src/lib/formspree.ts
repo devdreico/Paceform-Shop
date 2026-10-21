@@ -27,7 +27,7 @@ function construirPayload(
     metodo_pago: metodo === "contra-entrega" ? "Contra entrega" : "Mercado Pago (pendiente de confirmación manual)",
     nombre: envio.nombre,
     telefono: envio.telefono,
-    email: envio.email,
+    email: envio.email || "—",
     ciudad: envio.ciudad,
     direccion: envio.direccion,
     barrio: envio.barrio,

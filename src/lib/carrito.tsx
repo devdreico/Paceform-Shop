@@ -70,7 +70,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       return [...prev, nuevo];
     });
-    setAbierto(true);
   }, []);
 
   const cambiarCantidad = useCallback((index: number, cantidad: number) => {

@@ -12,15 +12,17 @@ export const MARCA = {
 export const TIENDAS_FILIALES = [
   {
     nombre: "Botané",
-    descripcion: "Productos naturistas y de salud",
+    tipo: "natural" as const,
+    descripcion: "Cuidado natural y nutrición",
     url: "https://botane.presentto.online",
-    etiqueta: "Nutrición natural",
+    etiqueta: "Cuidado natural",
   },
   {
     nombre: "Vexna Bike",
-    descripcion: "Tienda de bike & running",
+    tipo: "ciclismo" as const,
+    descripcion: "Ciclismo y running",
     url: "https://vexna.presentto.online",
-    etiqueta: "Ciclismo y running",
+    etiqueta: "Ciclismo",
   },
 ];
 
@@ -79,10 +81,46 @@ export const ENVIO = {
   },
 };
 
+export function normalizarCiudad(s: string): string {
+  return s
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+export const CIUDADES_PRINCIPALES = ENVIO.principales.ciudades;
+
+export const CIUDADES_EXTRA = [
+  "Tunja",
+  "Cúcuta",
+  "Popayán",
+  "Armenia",
+  "Florencia",
+  "Valledupar",
+  "Riohacha",
+  "Quibdó",
+  "Yopal",
+  "Leticia",
+  "San Andrés",
+  "Barrancabermeja",
+  "Floridablanca",
+  "Girón",
+  "Piedecuesta",
+  "Duitama",
+  "Sogamoso",
+  "Tuluá",
+  "Buenaventura",
+  "Zipaquirá",
+];
+
+export const CIUDADES = [...CIUDADES_PRINCIPALES, ...CIUDADES_EXTRA];
+
 export function diasEstimados(ciudad: string): string {
-  const normalizada = ciudad.trim().toLowerCase();
+  if (!ciudad || ciudad.trim().length < 2) return "";
+  const n = normalizarCiudad(ciudad);
   const esPrincipal = ENVIO.principales.ciudades.some(
-    (c) => c.toLowerCase() === normalizada
+    (c) => normalizarCiudad(c) === n
   );
   return esPrincipal ? ENVIO.principales.dias : ENVIO.resto.dias;
 }

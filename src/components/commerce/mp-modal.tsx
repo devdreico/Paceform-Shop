@@ -7,6 +7,19 @@ import { MERCADO_PAGO, diasEstimados } from "@/lib/config";
 import { enviarMercadoPago } from "@/lib/formspree";
 import { formatCOP } from "@/lib/formato";
 import Boton from "@/components/ui/boton";
+import CampoCiudad from "@/components/commerce/campo-ciudad";
+
+const CLAVE_ENVIO = "paceform-envio";
+
+const VACIO: DatosEnvio = {
+  nombre: "",
+  telefono: "",
+  email: "",
+  ciudad: "",
+  direccion: "",
+  barrio: "",
+  notas: "",
+};
 
 export default function MPModal({
   producto,
@@ -22,22 +35,37 @@ export default function MPModal({
   const [paso, setPaso] = useState<"datos" | "exito">("datos");
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [datos, setDatos] = useState<DatosEnvio>({
-    nombre: "",
-    telefono: "",
-    email: "",
-    ciudad: "",
-    direccion: "",
-    barrio: "",
-    notas: "",
-  });
+  const [datos, setDatos] = useState<DatosEnvio>(VACIO);
 
   const link = producto.mercadopagoUrl ?? MERCADO_PAGO.linkGenerico;
 
   useEffect(() => {
     document.body.classList.add("scroll-bloqueado");
-    return () => document.body.classList.remove("scroll-bloqueado");
+    const id = requestAnimationFrame(() => {
+      try {
+        const raw = localStorage.getItem(CLAVE_ENVIO);
+        if (raw) setDatos({ ...VACIO, ...JSON.parse(raw) });
+      } catch {
+        /* ignorar */
+      }
+    });
+    return () => {
+      document.body.classList.remove("scroll-bloqueado");
+      cancelAnimationFrame(id);
+    };
   }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CLAVE_ENVIO, JSON.stringify(datos));
+    } catch {
+      /* ignorar */
+    }
+  }, [datos]);
+
+  function set(clave: keyof DatosEnvio, valor: string) {
+    setDatos((d) => ({ ...d, [clave]: valor }));
+  }
 
   async function alEnviar(e: React.FormEvent) {
     e.preventDefault();
@@ -63,21 +91,35 @@ export default function MPModal({
     etiqueta: string,
     clave: keyof DatosEnvio,
     tipo = "text",
-    requerido = true
+    requerido = true,
+    autoComplete?: string,
+    inputMode?: "text" | "tel" | "email" | "numeric",
+    enterKeyHint?: "next" | "done" | "send",
+    placeholder?: string
   ) {
     return (
       <label className="block">
-        <span className="text-xs font-bold text-ceniza">{etiqueta}</span>
+        <span className="text-xs font-bold text-ceniza">
+          {etiqueta}
+          {requerido ? "" : " (opcional)"}
+        </span>
         <input
           type={tipo}
           required={requerido}
           value={datos[clave]}
-          onChange={(e) => setDatos({ ...datos, [clave]: e.target.value })}
+          onChange={(e) => set(clave, e.target.value)}
+          name={clave}
+          autoComplete={autoComplete}
+          inputMode={inputMode}
+          enterKeyHint={enterKeyHint}
+          placeholder={placeholder}
           className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
         />
       </label>
     );
   }
+
+  const dias = diasEstimados(datos.ciudad);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
@@ -111,19 +153,72 @@ export default function MPModal({
                 {formatCOP(producto.precio)}
               </p>
               <p className="text-xs text-ceniza mt-1">
-                Envío gratis · Entrega estimada {diasEstimados(datos.ciudad || "Bogotá")}
+                Envío gratis
+                {dias ? ` · Entrega estimada ${dias}` : ""}
               </p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-3">
-              {campo("Nombre completo", "nombre")}
-              {campo("Teléfono / WhatsApp", "telefono", "tel")}
-              {campo("Correo electrónico", "email", "email")}
-              {campo("Ciudad", "ciudad")}
-              {campo("Dirección", "direccion")}
-              {campo("Barrio", "barrio")}
+              {campo(
+                "Nombre completo",
+                "nombre",
+                "text",
+                true,
+                "name",
+                "text",
+                "next"
+              )}
+              {campo(
+                "Teléfono / WhatsApp",
+                "telefono",
+                "tel",
+                true,
+                "tel",
+                "tel",
+                "next",
+                "300 123 4567"
+              )}
+              {campo(
+                "Correo electrónico",
+                "email",
+                "email",
+                false,
+                "email",
+                "email",
+                "next",
+                "tu@correo.com"
+              )}
+              {campo(
+                "Barrio",
+                "barrio",
+                "text",
+                true,
+                "address-level3",
+                "text",
+                "next"
+              )}
+              {campo(
+                "Dirección",
+                "direccion",
+                "text",
+                true,
+                "street-address",
+                "text",
+                "done",
+                "Calle, número, apto…"
+              )}
             </div>
-            {campo("Notas de entrega (opcional)", "notas", "text", false)}
+            <CampoCiudad valor={datos.ciudad} onChange={(v) => set("ciudad", v)} />
+            {campo(
+              "Notas de entrega",
+              "notas",
+              "text",
+              false,
+              undefined,
+              "text",
+              "done",
+              "Horario preferido, portería…"
+            )}
 
             {error && (
               <p className="text-sm font-semibold bg-[#FFF3C4] rounded-2xl px-4 py-3">
@@ -164,7 +259,8 @@ export default function MPModal({
             <p className="text-sm text-ceniza max-w-sm mx-auto">
               Abrimos el link de Mercado Pago. Realiza el pago por{" "}
               <strong className="text-carbon">{formatCOP(producto.precio)}</strong>{" "}
-              con la referencia <strong className="text-carbon">PACEFORM {producto.nombre}</strong>{" "}
+              con la referencia{" "}
+              <strong className="text-carbon">PACEFORM {producto.nombre}</strong>{" "}
               y envíanos el comprobante por WhatsApp.
             </p>
             <Boton href={link} external variant="mp" className="mx-auto">

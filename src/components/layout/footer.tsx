@@ -1,8 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { MessageCircle, Mail } from "lucide-react";
-import { WHATSAPP, INSTAGRAM } from "@/lib/config";
+import { MessageCircle, Mail, ExternalLink, Leaf, Bike } from "lucide-react";
+import { WHATSAPP, INSTAGRAM, TIENDAS_FILIALES } from "@/lib/config";
 import IconoInstagram from "@/components/ui/icono-instagram";
+
+const iconosFiliales = { natural: Leaf, ciclismo: Bike } as const;
 
 const columnas = [
   {
@@ -36,7 +38,7 @@ const columnas = [
 export default function Footer() {
   return (
     <footer className="bg-carbon text-blanco mt-16 pb-20 md:pb-0">
-      <div className="mx-auto max-w-7xl px-4 py-14 grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+      <div className="mx-auto max-w-7xl px-4 py-14 grid gap-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         <div className="lg:col-span-2">
           <div className="bg-blanco rounded-2xl inline-flex px-4 py-3">
             <Image
@@ -102,6 +104,34 @@ export default function Footer() {
             </ul>
           </div>
         ))}
+
+        <div>
+          <h3 className="text-sm font-extrabold uppercase tracking-wide text-blanco">
+            Nuestras tiendas
+          </h3>
+          <ul className="mt-4 space-y-3">
+            {TIENDAS_FILIALES.map((t) => {
+              const Icono = iconosFiliales[t.tipo] ?? ExternalLink;
+              return (
+                <li key={t.nombre}>
+                  <a
+                    href={t.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex flex-col gap-0.5 text-sm"
+                  >
+                    <span className="inline-flex items-center gap-1.5 font-bold text-blanco group-hover:text-verde-100 transition-colors">
+                      <Icono className="size-4 text-verde-100" />
+                      {t.nombre}
+                      <ExternalLink className="size-3 opacity-50" />
+                    </span>
+                    <span className="text-xs text-white/50">{t.etiqueta}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
 
       <div className="border-t border-white/10">
