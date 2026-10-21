@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Producto } from "@/lib/tipos";
 import { formatCOP } from "@/lib/formato";
 import Badge from "@/components/ui/badge";
@@ -16,12 +17,13 @@ export default function ProductCard({ producto }: { producto: Producto }) {
       href={`/tienda/${producto.slug}`}
       className="group vidrio-card tarjeta tarjeta-hover overflow-hidden flex flex-col sin-reflejos"
     >
-      <div className="relative aspect-square bg-humo overflow-hidden rounded-t-[22px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      <div className="relative aspect-[4/3] bg-humo overflow-hidden rounded-t-[22px]">
+        <Image
           src={producto.imagen}
           alt={producto.nombre}
-          className="size-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
+          fill
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          className="object-contain p-2 group-hover:scale-[1.03] transition-transform duration-300"
         />
         {(producto.etiqueta || descuento) && (
           <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Loader2, Truck, ShieldCheck, Banknote } from "lucide-react";
 import { useCarrito, totalDe } from "@/lib/carrito";
 import { productoPorSlug } from "@/data/productos";
@@ -245,9 +246,14 @@ export default function CheckoutPage() {
               if (!prod) return null;
               return (
                 <li key={i} className="flex gap-3">
-                  <span className="size-14 rounded-xl bg-humo overflow-hidden shrink-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={prod.imagen} alt="" className="size-full object-cover" />
+                  <span className="relative size-14 rounded-xl bg-humo overflow-hidden shrink-0">
+                    <Image
+                      src={prod.imagen}
+                      alt=""
+                      fill
+                      sizes="56px"
+                      className="object-contain"
+                    />
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-bold truncate">{prod.nombre}</p>

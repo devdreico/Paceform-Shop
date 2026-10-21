@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect } from "react";
 import { X, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
 import { useCarrito, totalDe } from "@/lib/carrito";
@@ -71,10 +72,15 @@ export default function CartDrawer() {
                     <Link
                       href={`/tienda/${prod.slug}`}
                       onClick={() => setAbierto(false)}
-                      className="size-20 rounded-2xl bg-humo shrink-0 overflow-hidden"
+                      className="relative size-20 rounded-2xl bg-humo shrink-0 overflow-hidden"
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={prod.imagen} alt="" className="size-full object-cover" />
+                      <Image
+                        src={prod.imagen}
+                        alt=""
+                        fill
+                        sizes="80px"
+                        className="object-contain"
+                      />
                     </Link>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold leading-tight">{prod.nombre}</p>

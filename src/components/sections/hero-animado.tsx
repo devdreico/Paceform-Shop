@@ -128,25 +128,25 @@ export function RevealSeccion({
 
 const fotosEscena = [
   {
-    src: "/lifestyle/corredor-1.jpg",
+    src: "/lifestyle/corredor-1.webp",
     alt: "Corredor en ruta al amanecer",
     posicion: "top-[3%] left-[2%] w-[50%] z-0",
     clase: "tarjeta-3d-1",
-    ratio: "aspect-[4/5]",
+    ratio: "aspect-[3/2]",
   },
   {
-    src: "/lifestyle/corredor-2.jpg",
+    src: "/lifestyle/corredor-2.webp",
     alt: "Corredora entrenando en la ciudad",
     posicion: "top-[8%] right-[2%] w-[44%] z-0",
     clase: "tarjeta-3d-2",
-    ratio: "aspect-[3/4]",
+    ratio: "aspect-[3/2]",
   },
   {
-    src: "/lifestyle/corredor-3.jpg",
+    src: "/lifestyle/corredor-3.webp",
     alt: "Salida de running en grupo",
     posicion: "bottom-[3%] left-[14%] w-[54%] z-0",
     clase: "tarjeta-3d-3",
-    ratio: "aspect-[16/10]",
+    ratio: "aspect-[3/2]",
   },
 ];
 

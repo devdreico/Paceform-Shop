@@ -5,6 +5,7 @@ import { productoPorSlug } from "@/data/productos";
 import { formatCOP } from "@/lib/formato";
 import GlassPanel from "@/components/ui/glass-panel";
 import Badge from "@/components/ui/badge";
+import Image from "next/image";
 
 export const metadata = {
   title: "Kits de entrenamiento",
@@ -57,9 +58,14 @@ export default function KitsPage() {
                 <ul className="space-y-2">
                   {items.map((p) => (
                     <li key={p.slug} className="flex items-center gap-3">
-                      <span className="size-9 rounded-xl bg-humo overflow-hidden shrink-0">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={p.imagen} alt="" className="size-full object-cover" />
+                      <span className="relative size-9 rounded-xl bg-humo overflow-hidden shrink-0">
+                        <Image
+                          src={p.imagen}
+                          alt=""
+                          fill
+                          sizes="36px"
+                          className="object-contain"
+                        />
                       </span>
                       <div className="min-w-0 flex-1">
                         <Link

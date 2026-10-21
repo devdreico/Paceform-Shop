@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/cn";
 
 export default function GaleriaProducto({
@@ -32,13 +33,15 @@ export default function GaleriaProducto({
 
   return (
     <div className="vidrio panel p-4">
-      <div className="rounded-[18px] overflow-hidden bg-humo aspect-[4/3]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      <div className="relative rounded-[18px] overflow-hidden bg-humo aspect-[4/3]">
+        <Image
           key={activa}
           src={activa}
           alt={alt}
-          className="w-full h-full object-cover crossfade-img"
+          fill
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          priority
+          className="object-contain crossfade-img"
         />
       </div>
       {todas.length > 1 && (
@@ -49,15 +52,20 @@ export default function GaleriaProducto({
               type="button"
               onClick={() => setActiva(img)}
               className={cn(
-                "size-16 rounded-xl overflow-hidden bg-humo shrink-0 border-[2px] transition-colors",
+                "relative size-16 rounded-xl overflow-hidden bg-humo shrink-0 border-[2px] transition-colors",
                 activa === img
                   ? "border-verde"
                   : "border-transparent hover:border-verde/30"
               )}
               aria-label={`Ver imagen ${i + 1}`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img} alt="" className="size-full object-cover" />
+              <Image
+                src={img}
+                alt=""
+                fill
+                sizes="64px"
+                className="object-contain"
+              />
             </button>
           ))}
         </div>

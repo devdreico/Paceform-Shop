@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { Search, X, Package } from "lucide-react";
 import { buscarProductos, categorias } from "@/data/productos";
@@ -84,12 +85,13 @@ export default function Buscador({ onCerrar }: { onCerrar: () => void }) {
               onClick={onCerrar}
               className="flex items-center gap-4 px-5 py-4 min-h-14 hover:bg-verde-50 transition-colors border-b border-vidrio-borde last:border-0"
             >
-              <div className="size-14 rounded-2xl bg-humo shrink-0 overflow-hidden">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+              <div className="relative size-14 rounded-2xl bg-humo shrink-0 overflow-hidden">
+                <Image
                   src={p.imagen}
                   alt=""
-                  className="size-full object-cover"
+                  fill
+                  sizes="56px"
+                  className="object-contain"
                 />
               </div>
               <div className="min-w-0">

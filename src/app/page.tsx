@@ -137,7 +137,7 @@ export default function HomePage() {
               <img
                 src={adizero.imagen}
                 alt={adizero.nombre}
-                className="w-full rounded-[18px]"
+                className="w-full aspect-[4/3] object-contain rounded-[18px]"
               />
             </div>
             <div>
@@ -214,19 +214,19 @@ export default function HomePage() {
             <div className="rounded-[22px] overflow-hidden border border-white/10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/lifestyle/corredor-4.jpg"
+                src="/lifestyle/corredor-4.webp"
                 alt="Corredor entrenando en la ciudad"
                 loading="lazy"
-                className="w-full h-full aspect-[3/4] object-cover"
+                className="w-full aspect-[3/4] object-cover"
               />
             </div>
             <div className="rounded-[22px] overflow-hidden border border-white/10 mt-6 sm:mt-10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/lifestyle/corredor-5.jpg"
+                src="/lifestyle/corredor-5.webp"
                 alt="Corredora en su ritmo de entrenamiento"
                 loading="lazy"
-                className="w-full h-full aspect-[3/4] object-cover"
+                className="w-full aspect-[3/4] object-cover"
               />
             </div>
           </div>

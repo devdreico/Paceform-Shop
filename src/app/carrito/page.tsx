@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Minus, Plus, Trash2, ShoppingBag, Truck } from "lucide-react";
 import { useCarrito, totalDe } from "@/lib/carrito";
@@ -50,10 +51,15 @@ export default function CarritoPage() {
               <GlassPanel key={`${item.productoSlug}-${item.talla}-${item.color}-${i}`} className="p-4 flex gap-4">
                 <Link
                   href={`/tienda/${prod.slug}`}
-                  className="size-24 rounded-2xl bg-humo shrink-0 overflow-hidden"
+                  className="relative size-24 rounded-2xl bg-humo shrink-0 overflow-hidden"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={prod.imagen} alt="" className="size-full object-cover" />
+                  <Image
+                    src={prod.imagen}
+                    alt=""
+                    fill
+                    sizes="96px"
+                    className="object-contain"
+                  />
                 </Link>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-3">
