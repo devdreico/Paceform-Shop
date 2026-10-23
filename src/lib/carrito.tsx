@@ -11,6 +11,11 @@ import {
 import type { ItemCarrito } from "./tipos";
 import { productos, productoPorSlug } from "@/data/productos";
 import { totalPedido } from "./calculos-pedido";
+import {
+  CANTIDAD_MAXIMA_POR_VARIANTE,
+  itemCarritoValido,
+  normalizarItemsCarrito,
+} from "./validacion-carrito";
 
 const CLAVE = "paceform-carrito-v1";
 
@@ -25,6 +30,7 @@ type ContextoCarrito = {
   abierto: boolean;
   setAbierto: (v: boolean) => void;
   listo: boolean;
+  avisoRestauracion: boolean;
 };
 
 const CarritoContext = createContext<ContextoCarrito | null>(null);
@@ -33,14 +39,28 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<ItemCarrito[]>([]);
   const [abierto, setAbierto] = useState(false);
   const [listo, setListo] = useState(false);
+  const [avisoRestauracion, setAvisoRestauracion] = useState(false);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => {
       try {
         const crudo = localStorage.getItem(CLAVE);
-        if (crudo) setItems(JSON.parse(crudo));
+        if (crudo) {
+          const guardado: unknown = JSON.parse(crudo);
+          const normalizados = normalizarItemsCarrito(guardado);
+          setItems(normalizados);
+          const itemsValidos = Array.isArray(guardado)
+            ? guardado.filter(itemCarritoValido)
+            : [];
+          setAvisoRestauracion(
+            !Array.isArray(guardado) ||
+              itemsValidos.length !== guardado.length ||
+              itemsValidos.reduce((suma, item) => suma + item.cantidad, 0) !==
+                normalizados.reduce((suma, item) => suma + item.cantidad, 0)
+          );
+        }
       } catch {
-        /* almacenamiento no disponible */
+        setAvisoRestauracion(true);
       }
       setListo(true);
     });
@@ -57,6 +77,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items, listo]);
 
   const agregar = useCallback((nuevo: ItemCarrito) => {
+    if (!itemCarritoValido(nuevo)) return;
     setItems((prev) => {
       const i = prev.findIndex(
         (it) =>
@@ -66,7 +87,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       );
       if (i >= 0) {
         const copia = [...prev];
-        copia[i] = { ...copia[i], cantidad: copia[i].cantidad + nuevo.cantidad };
+        const cantidad = copia[i].cantidad + nuevo.cantidad;
+        if (!Number.isSafeInteger(cantidad) || cantidad > CANTIDAD_MAXIMA_POR_VARIANTE) return prev;
+        copia[i] = { ...copia[i], cantidad };
         return copia;
       }
       return [...prev, nuevo];
@@ -76,6 +99,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const cambiarCantidad = useCallback((index: number, cantidad: number) => {
     setItems((prev) => {
       if (cantidad <= 0) return prev.filter((_, i) => i !== index);
+      if (
+        !Number.isSafeInteger(cantidad) ||
+        cantidad > CANTIDAD_MAXIMA_POR_VARIANTE ||
+        index < 0 ||
+        index >= prev.length
+      ) {
+        return prev;
+      }
       const copia = [...prev];
       copia[index] = { ...copia[index], cantidad };
       return copia;
@@ -109,6 +140,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     abierto,
     setAbierto,
     listo,
+    avisoRestauracion,
   };
 
   return (

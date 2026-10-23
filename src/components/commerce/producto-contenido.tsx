@@ -29,24 +29,32 @@ import GlassPanel from "@/components/ui/glass-panel";
 import Badge from "@/components/ui/badge";
 
 export default function ProductoContenido({ slug }: { slug: string }) {
+  const producto = productoPorSlug(slug);
   const [imagenColor, setImagenColor] = useState<string | undefined>(undefined);
+  const [errorVariante, setErrorVariante] = useState<string | null>(null);
   const [variante, setVariante] = useState<{
     talla: string | null;
     color: string | null;
   }>({ talla: null, color: null });
   const onColorChange = useCallback((img?: string) => setImagenColor(img), []);
   const onVariantChange = useCallback(
-    (seleccion: { talla: string | null; color: string | null }) =>
-      setVariante(seleccion),
+    (seleccion: { talla: string | null; color: string | null }) => {
+      setVariante(seleccion);
+      setErrorVariante(null);
+    },
     []
   );
   const irAlSelector = useCallback(() => {
+    if (producto?.tallas.length && !variante.talla) {
+      setErrorVariante("Selecciona una talla para continuar.");
+    } else if (!variante.color) {
+      setErrorVariante("Selecciona un color para continuar.");
+    }
     document
       .getElementById("selector-compra")
       ?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, []);
+  }, [producto, variante.color, variante.talla]);
 
-  const producto = productoPorSlug(slug);
   if (!producto) return null;
 
   const confianza = [
@@ -159,7 +167,13 @@ export default function ProductoContenido({ slug }: { slug: string }) {
           </div>
 
           <div className="mt-8" id="selector-compra">
+            {errorVariante && (
+              <p role="alert" className="mb-3 rounded-xl bg-[#FFF3C4] px-4 py-3 text-sm font-semibold">
+                {errorVariante}
+              </p>
+            )}
             <SelectorProducto
+              key={producto.slug}
               producto={producto}
               onColorChange={onColorChange}
               onVariantChange={onVariantChange}

@@ -10,7 +10,7 @@ import Boton from "@/components/ui/boton";
 import GlassPanel from "@/components/ui/glass-panel";
 
 export default function CarritoPage() {
-  const { items, cambiarCantidad, quitar, subtotal, listo } = useCarrito();
+  const { items, cambiarCantidad, quitar, subtotal, listo, avisoRestauracion } = useCarrito();
 
   if (!listo) {
     return (
@@ -41,6 +41,11 @@ export default function CarritoPage() {
       <p className="mt-1 text-sm text-ceniza">
         Compra contra entrega: pagas al recibir. Envío gratis a todo Colombia.
       </p>
+      {avisoRestauracion && (
+        <p role="status" className="mt-4 rounded-xl bg-[#FFF3C4] px-4 py-3 text-sm font-semibold">
+          Actualizamos tu carrito y retiramos variantes que ya no están disponibles. Revísalo antes de continuar.
+        </p>
+      )}
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_320px] lg:items-start">
         <div className="space-y-3">

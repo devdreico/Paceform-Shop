@@ -31,6 +31,7 @@ export default function BarraCompraMovil({
     (producto.tallas.length > 0 && !talla) || !color;
 
   function alAgregar() {
+    if (!listo) return;
     if (requerido || faltaSeleccion) {
       if (onIntentar) {
         onIntentar();
@@ -88,6 +89,7 @@ export default function BarraCompraMovil({
         <button
           type="button"
           onClick={alAgregar}
+          disabled={!listo}
           className={cn(
             "btn-primario inline-flex items-center justify-center gap-2 px-5 py-3 min-h-11 text-sm shrink-0",
             rebotar && "badge-bounce"

@@ -18,6 +18,7 @@ export default function CartDrawer() {
     quitar,
     subtotal,
     listo,
+    avisoRestauracion,
   } = useCarrito();
 
   useEffect(() => {
@@ -63,6 +64,11 @@ export default function CartDrawer() {
         ) : (
           <>
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+              {avisoRestauracion && (
+                <p role="status" className="rounded-xl bg-[#FFF3C4] px-3 py-2 text-xs font-semibold">
+                  Actualizamos variantes antiguas del carrito. Revísalo antes de continuar.
+                </p>
+              )}
               {items.map((item, i) => {
                 const prod = productoPorSlug(item.productoSlug);
                 if (!prod) return null;

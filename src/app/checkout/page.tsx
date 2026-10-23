@@ -1,21 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2, Truck, ShieldCheck, Banknote } from "lucide-react";
 import { useCarrito } from "@/lib/carrito";
 import { productoPorSlug } from "@/data/productos";
 import { formatCOP } from "@/lib/formato";
-import { enviarContraEntrega } from "@/lib/formspree";
+import { enviarContraEntrega } from "@/lib/pedidos-cliente";
 import { departamentoParaMunicipio, municipioPerteneceA } from "@/lib/geografia-colombia";
 import { totalPedido } from "@/lib/calculos-pedido";
+import { registrarPedidoAceptado } from "@/lib/confirmacion-pedido";
+import { WHATSAPP } from "@/lib/config";
 import type { DatosEnvio } from "@/lib/tipos";
 import Boton from "@/components/ui/boton";
 import GlassPanel from "@/components/ui/glass-panel";
 import CampoCiudad from "@/components/commerce/campo-ciudad";
 
 const CLAVE_ENVIO = "paceform-envio";
+const CLAVE_PEDIDO_PENDIENTE = "paceform-pedido-pendiente";
+const VIGENCIA_ENVIO_MS = 30 * 24 * 60 * 60 * 1000;
 
 const VACIO: DatosEnvio = {
   nombre: "",
@@ -29,19 +33,41 @@ const VACIO: DatosEnvio = {
 };
 
 export default function CheckoutPage() {
-  const { items, subtotal, listo, vaciar } = useCarrito();
+  const { items, subtotal, listo, vaciar, avisoRestauracion } = useCarrito();
   const router = useRouter();
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [datos, setDatos] = useState<DatosEnvio>(VACIO);
   const [hidratado, setHidratado] = useState(false);
+  const [pedidoPendiente, setPedidoPendiente] = useState<string | null>(null);
+  const [reintentoAutorizado, setReintentoAutorizado] = useState(false);
+  const envioEnCurso = useRef(false);
 
   useEffect(() => {
     const id = requestAnimationFrame(() => {
       try {
         const raw = localStorage.getItem(CLAVE_ENVIO);
+        const intentoPendiente = sessionStorage.getItem(CLAVE_PEDIDO_PENDIENTE);
+        if (intentoPendiente && /^[0-9a-f-]{36}$/i.test(intentoPendiente)) {
+          setPedidoPendiente(intentoPendiente);
+        }
         if (raw) {
-          const guardado = JSON.parse(raw) as Partial<DatosEnvio> & {
+          const parseado: unknown = JSON.parse(raw);
+          const sobre =
+            typeof parseado === "object" && parseado !== null && "datos" in parseado
+              ? parseado
+              : null;
+          if (
+            sobre &&
+            "actualizado" in sobre &&
+            typeof sobre.actualizado === "number" &&
+            Date.now() - sobre.actualizado > VIGENCIA_ENVIO_MS
+          ) {
+            localStorage.removeItem(CLAVE_ENVIO);
+            setHidratado(true);
+            return;
+          }
+          const guardado = (sobre && "datos" in sobre ? sobre.datos : parseado) as Partial<DatosEnvio> & {
             ciudad?: string;
           };
           const { ciudad: ciudadAnterior, ...datosGuardados } = guardado;
@@ -65,7 +91,10 @@ export default function CheckoutPage() {
   useEffect(() => {
     if (!hidratado) return;
     try {
-      localStorage.setItem(CLAVE_ENVIO, JSON.stringify(datos));
+      localStorage.setItem(
+        CLAVE_ENVIO,
+        JSON.stringify({ datos, actualizado: Date.now() })
+      );
     } catch {
       /* ignorar */
     }
@@ -82,7 +111,16 @@ export default function CheckoutPage() {
 
   async function alEnviar(e: React.FormEvent) {
     e.preventDefault();
-    if (items.length === 0 || datos.telefono.length !== 10 || !datos.telefono.startsWith("3")) {
+    if (envioEnCurso.current) return;
+    if (pedidoPendiente && !reintentoAutorizado) {
+      setError("Verifica primero el estado del pedido antes de volver a enviarlo.");
+      return;
+    }
+    if (items.length === 0) {
+      setError("Tu carrito está vacío. Agrega un producto antes de confirmar.");
+      return;
+    }
+    if (datos.telefono.length !== 10 || !datos.telefono.startsWith("3")) {
       setError("Revisa el número celular: debe tener 10 dígitos y comenzar por 3.");
       return;
     }
@@ -90,10 +128,27 @@ export default function CheckoutPage() {
       setError("Selecciona un departamento y un municipio válidos.");
       return;
     }
+    envioEnCurso.current = true;
+    setReintentoAutorizado(false);
     setCargando(true);
     setError(null);
+    const pedidoId = pedidoPendiente ?? crypto.randomUUID();
     try {
-      await enviarContraEntrega(items, datos);
+      sessionStorage.setItem(CLAVE_PEDIDO_PENDIENTE, pedidoId);
+    } catch {
+      /* El bloqueo en memoria sigue activo durante este intento. */
+    }
+    try {
+      await enviarContraEntrega(items, datos, pedidoId);
+      registrarPedidoAceptado(pedidoId);
+      setPedidoPendiente(null);
+      setReintentoAutorizado(false);
+      try {
+        sessionStorage.removeItem(CLAVE_PEDIDO_PENDIENTE);
+      } catch {
+        /* La sesión puede no permitir almacenamiento. */
+      }
+      setPedidoPendiente(null);
       vaciar();
       try {
         localStorage.removeItem(CLAVE_ENVIO);
@@ -101,15 +156,32 @@ export default function CheckoutPage() {
         /* ignorar */
       }
       const params = new URLSearchParams({
-        nombre: datos.nombre,
-        ciudad: datos.municipio,
-        total: String(totalPedido(items)),
+        id: pedidoId,
       });
       router.push(`/pedido/exito?${params.toString()}`);
-    } catch {
-      setError(
-        "No fue posible registrar el pedido. Verifica tus datos o escríbenos por WhatsApp."
-      );
+    } catch (error) {
+      const ambiguo = error instanceof Error && error.message === "FORMULARIO_TIMEOUT";
+      const mensajeServidor =
+        error instanceof Error &&
+        error.message !== "Failed to fetch" &&
+        error.message !== "FORMULARIO_TIMEOUT"
+          ? error.message
+          : "No fue posible registrar el pedido. Conservamos tu carrito; inténtalo de nuevo.";
+      if (ambiguo) {
+        setPedidoPendiente(pedidoId);
+      } else {
+        setPedidoPendiente(null);
+        setReintentoAutorizado(false);
+        try {
+          sessionStorage.removeItem(CLAVE_PEDIDO_PENDIENTE);
+        } catch {
+          /* La sesión puede no permitir almacenamiento. */
+        }
+      }
+      setError(ambiguo
+        ? `No recibimos confirmación. Conservamos el pedido y la referencia ${pedidoId.slice(0, 8).toUpperCase()}; consúltala por WhatsApp antes de reintentar.`
+        : mensajeServidor);
+      envioEnCurso.current = false;
       setCargando(false);
     }
   }
@@ -142,6 +214,7 @@ export default function CheckoutPage() {
   const sugerenciaGmail = emailNormalizado && !emailValido
     ? `${emailNormalizado.split("@")[0]}@gmail.com`
     : "";
+  const contactoRevision = `Hola PACEFORM, necesito verificar el pedido contra entrega ${pedidoPendiente?.slice(0, 8).toUpperCase() ?? ""} antes de reintentarlo.`;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 pb-40 lg:pb-10">
@@ -153,6 +226,11 @@ export default function CheckoutPage() {
         Pagas en efectivo al recibir el pedido. Completa tus datos de envío y
         registramos el pedido automáticamente.
       </p>
+      {avisoRestauracion && (
+        <p role="status" className="mt-4 rounded-xl bg-[#FFF3C4] px-4 py-3 text-sm font-semibold">
+          Corregimos variantes antiguas del carrito. Revisa los productos antes de confirmar.
+        </p>
+      )}
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1fr_340px] lg:items-start">
         <form
@@ -292,9 +370,30 @@ export default function CheckoutPage() {
           </GlassPanel>
 
           {error && (
-            <p className="text-sm font-semibold bg-[#FFF3C4] rounded-2xl px-4 py-3">
-              {error}
-            </p>
+            <div role="alert" className="space-y-3 rounded-2xl bg-[#FFF3C4] px-4 py-3">
+              <p className="text-sm font-semibold">{error}</p>
+              {pedidoPendiente && (
+                <div className="flex flex-wrap gap-2">
+                  <Boton
+                    href={`https://wa.me/${WHATSAPP.numero}?text=${encodeURIComponent(contactoRevision)}`}
+                    external
+                    className="min-h-10 px-4 py-2 text-xs"
+                  >
+                    Verificar por WhatsApp
+                  </Boton>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setReintentoAutorizado(true);
+                      setError("Reintentaremos con la misma referencia del pedido.");
+                    }}
+                    className="min-h-10 px-3 text-xs font-semibold underline underline-offset-2"
+                  >
+                    Ya verifiqué; reintentar
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </form>
 
@@ -353,7 +452,7 @@ export default function CheckoutPage() {
             <Boton
               type="submit"
               form="checkout-form"
-              disabled={cargando}
+              disabled={cargando || (pedidoPendiente !== null && !reintentoAutorizado)}
               className="w-full py-4 min-h-14 text-base"
             >
               {cargando ? (
@@ -373,7 +472,7 @@ export default function CheckoutPage() {
         <Boton
           type="submit"
           form="checkout-form"
-          disabled={cargando}
+              disabled={cargando || (pedidoPendiente !== null && !reintentoAutorizado)}
           className="w-full py-4 min-h-14 text-base"
         >
           {cargando ? (

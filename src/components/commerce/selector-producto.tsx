@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Banknote, Check, Loader2, ShoppingBag } from "lucide-react";
 import type { Producto } from "@/lib/tipos";
 import { useCarrito } from "@/lib/carrito";
@@ -16,7 +17,8 @@ export default function SelectorProducto({
   onColorChange?: (imagen?: string) => void;
   onVariantChange?: (variante: { talla: string | null; color: string | null }) => void;
 }) {
-  const { agregar, setAbierto } = useCarrito();
+  const { agregar, listo } = useCarrito();
+  const router = useRouter();
   const [talla, setTalla] = useState<string | null>(
     producto.tallas.length === 1 ? producto.tallas[0] : null
   );
@@ -25,6 +27,7 @@ export default function SelectorProducto({
   );
   const [error, setError] = useState<string | null>(null);
   const [agregado, setAgregado] = useState(false);
+  const [comprando, setComprando] = useState(false);
 
   const requiereTalla = producto.tallas.length > 0;
   const faltan = (requiereTalla && !talla) || !color;
@@ -52,7 +55,7 @@ export default function SelectorProducto({
   }
 
   function alAgregar() {
-    if (!validar()) return;
+    if (!listo || !validar()) return;
     agregar({
       productoSlug: producto.slug,
       talla: talla ?? "Única",
@@ -64,14 +67,15 @@ export default function SelectorProducto({
   }
 
   function alComprarContraEntrega() {
-    if (!validar()) return;
+    if (!listo || !validar()) return;
     agregar({
       productoSlug: producto.slug,
       talla: talla ?? "Única",
       color: color ?? "Único",
       cantidad: 1,
     });
-    setAbierto(true);
+    setComprando(true);
+    router.push("/checkout");
   }
 
   return (
@@ -86,7 +90,10 @@ export default function SelectorProducto({
               <button
                 key={t}
                 type="button"
-                onClick={() => setTalla(t)}
+                onClick={() => {
+                  setTalla(t);
+                  setError(null);
+                }}
                 className={`min-w-12 h-12 px-4 rounded-2xl text-sm font-bold border-[1.5px] transition-colors ${
                   talla === t
                     ? "bg-verde text-blanco border-verde"
@@ -110,7 +117,10 @@ export default function SelectorProducto({
               <button
                 key={c.nombre}
                 type="button"
-                onClick={() => setColor(c.nombre)}
+                onClick={() => {
+                  setColor(c.nombre);
+                  setError(null);
+                }}
                 className={`inline-flex items-center gap-2 px-4 h-12 rounded-2xl text-xs font-bold border-[1.5px] transition-colors ${
                   color === c.nombre
                     ? "bg-verde text-blanco border-verde"
@@ -142,7 +152,7 @@ export default function SelectorProducto({
       )}
 
       <div className="grid gap-3">
-        <Boton onClick={alAgregar} className="w-full py-4 text-base">
+        <Boton onClick={alAgregar} disabled={!listo || comprando} className="w-full py-4 text-base">
           {agregado ? (
             <>
               <Check className="size-5" /> Agregado al carrito
@@ -154,8 +164,8 @@ export default function SelectorProducto({
             </>
           )}
         </Boton>
-        <Boton onClick={alComprarContraEntrega} className="w-full py-4 text-base">
-          <Banknote className="size-5" /> Comprar contraentrega
+        <Boton onClick={alComprarContraEntrega} disabled={!listo || comprando} className="w-full py-4 text-base">
+          <Banknote className="size-5" /> {comprando ? "Abriendo checkout…" : "Comprar contraentrega"}
         </Boton>
         <p className="text-xs text-ceniza text-center">
           Pagas en efectivo cuando recibas tu pedido.
