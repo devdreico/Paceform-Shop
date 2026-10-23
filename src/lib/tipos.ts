@@ -81,7 +81,8 @@ export type DatosEnvio = {
   nombre: string;
   telefono: string;
   email: string;
-  ciudad: string;
+  departamento: string;
+  municipio: string;
   direccion: string;
   barrio: string;
   notas: string;

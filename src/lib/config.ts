@@ -77,33 +77,6 @@ export function normalizarCiudad(s: string): string {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-export const CIUDADES_PRINCIPALES = ENVIO.principales.ciudades;
-
-export const CIUDADES_EXTRA = [
-  "Tunja",
-  "Cúcuta",
-  "Popayán",
-  "Armenia",
-  "Florencia",
-  "Valledupar",
-  "Riohacha",
-  "Quibdó",
-  "Yopal",
-  "Leticia",
-  "San Andrés",
-  "Barrancabermeja",
-  "Floridablanca",
-  "Girón",
-  "Piedecuesta",
-  "Duitama",
-  "Sogamoso",
-  "Tuluá",
-  "Buenaventura",
-  "Zipaquirá",
-];
-
-export const CIUDADES = [...CIUDADES_PRINCIPALES, ...CIUDADES_EXTRA];
-
 export function diasEstimados(ciudad: string): string {
   if (!ciudad || ciudad.trim().length < 2) return "";
   const n = normalizarCiudad(ciudad);

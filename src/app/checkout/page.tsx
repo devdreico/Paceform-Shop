@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2, Truck, ShieldCheck, Banknote } from "lucide-react";
-import { useCarrito, totalDe } from "@/lib/carrito";
+import { useCarrito } from "@/lib/carrito";
 import { productoPorSlug } from "@/data/productos";
 import { formatCOP } from "@/lib/formato";
 import { enviarContraEntrega } from "@/lib/formspree";
+import { departamentoParaMunicipio, municipioPerteneceA } from "@/lib/geografia-colombia";
+import { totalPedido } from "@/lib/calculos-pedido";
 import type { DatosEnvio } from "@/lib/tipos";
 import Boton from "@/components/ui/boton";
 import GlassPanel from "@/components/ui/glass-panel";
@@ -19,7 +21,8 @@ const VACIO: DatosEnvio = {
   nombre: "",
   telefono: "",
   email: "",
-  ciudad: "",
+  departamento: "",
+  municipio: "",
   direccion: "",
   barrio: "",
   notas: "",
@@ -37,7 +40,20 @@ export default function CheckoutPage() {
     const id = requestAnimationFrame(() => {
       try {
         const raw = localStorage.getItem(CLAVE_ENVIO);
-        if (raw) setDatos({ ...VACIO, ...JSON.parse(raw) });
+        if (raw) {
+          const guardado = JSON.parse(raw) as Partial<DatosEnvio> & {
+            ciudad?: string;
+          };
+          const { ciudad: ciudadAnterior, ...datosGuardados } = guardado;
+          const municipio = guardado.municipio || ciudadAnterior || "";
+          const departamento = guardado.departamento || departamentoParaMunicipio(municipio);
+          setDatos({
+            ...VACIO,
+            ...datosGuardados,
+            departamento,
+            municipio: municipioPerteneceA(departamento, municipio) ? municipio : "",
+          });
+        }
       } catch {
         /* ignorar */
       }
@@ -56,12 +72,24 @@ export default function CheckoutPage() {
   }, [datos, hidratado]);
 
   function set(clave: keyof DatosEnvio, valor: string) {
+    setError(null);
     setDatos((d) => ({ ...d, [clave]: valor }));
+  }
+
+  function cambiarTelefono(valor: string) {
+    set("telefono", valor.replace(/\D/g, "").slice(0, 10));
   }
 
   async function alEnviar(e: React.FormEvent) {
     e.preventDefault();
-    if (items.length === 0) return;
+    if (items.length === 0 || datos.telefono.length !== 10 || !datos.telefono.startsWith("3")) {
+      setError("Revisa el número celular: debe tener 10 dígitos y comenzar por 3.");
+      return;
+    }
+    if (!municipioPerteneceA(datos.departamento, datos.municipio)) {
+      setError("Selecciona un departamento y un municipio válidos.");
+      return;
+    }
     setCargando(true);
     setError(null);
     try {
@@ -74,8 +102,8 @@ export default function CheckoutPage() {
       }
       const params = new URLSearchParams({
         nombre: datos.nombre,
-        ciudad: datos.ciudad,
-        total: String(totalDe(items)),
+        ciudad: datos.municipio,
+        total: String(totalPedido(items)),
       });
       router.push(`/pedido/exito?${params.toString()}`);
     } catch {
@@ -108,10 +136,15 @@ export default function CheckoutPage() {
     );
   }
 
-  const total = totalDe(items);
+  const total = totalPedido(items);
+  const emailNormalizado = datos.email.trim();
+  const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado);
+  const sugerenciaGmail = emailNormalizado && !emailValido
+    ? `${emailNormalizado.split("@")[0]}@gmail.com`
+    : "";
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 pb-28 lg:pb-10">
+    <div className="mx-auto max-w-5xl px-4 py-10 pb-40 lg:pb-10">
       <p className="text-xs font-bold uppercase tracking-wide text-verde">
         Checkout · Contra entrega
       </p>
@@ -125,7 +158,7 @@ export default function CheckoutPage() {
         <form
           id="checkout-form"
           onSubmit={alEnviar}
-          className="order-2 lg:order-1 space-y-5"
+          className="order-1 space-y-5"
         >
           <GlassPanel solido className="p-6">
             <h2 className="text-base font-extrabold inline-flex items-center gap-2">
@@ -154,14 +187,24 @@ export default function CheckoutPage() {
                   required
                   type="tel"
                   value={datos.telefono}
-                  onChange={(e) => set("telefono", e.target.value)}
+                  onChange={(e) => cambiarTelefono(e.target.value)}
                   name="telefono"
-                  autoComplete="tel"
+                  autoComplete="tel-national"
                   inputMode="tel"
                   enterKeyHint="next"
-                  placeholder="300 123 4567"
-                  className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
+                  minLength={10}
+                  maxLength={10}
+                  pattern="3[0-9]{9}"
+                  placeholder="3001234567"
+                  aria-describedby="telefono-ayuda"
+                  className="mt-1 w-full h-12 pl-14 pr-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
+                <span className="relative -mt-12 ml-4 flex h-12 items-center text-sm font-bold text-ceniza pointer-events-none">
+                  +57
+                </span>
+                <span id="telefono-ayuda" className="sr-only">
+                  Escribe los 10 dígitos de tu celular colombiano, sin el prefijo +57.
+                </span>
               </label>
               <label className="block">
                 <span className="text-xs font-bold text-ceniza">
@@ -178,6 +221,15 @@ export default function CheckoutPage() {
                   placeholder="tu@correo.com"
                   className="mt-1 w-full h-12 px-4 rounded-2xl bg-white border-[1.5px] border-vidrio-borde text-base sm:text-sm font-medium outline-none focus:border-verde"
                 />
+                {sugerenciaGmail && (
+                  <button
+                    type="button"
+                    onClick={() => set("email", sugerenciaGmail)}
+                    className="mt-2 text-xs font-semibold text-verde underline underline-offset-2"
+                  >
+                    Usar {sugerenciaGmail}
+                  </button>
+                )}
               </label>
             </div>
           </GlassPanel>
@@ -187,7 +239,15 @@ export default function CheckoutPage() {
               <Truck className="size-4 text-verde" /> Dirección de envío
             </h2>
             <div className="mt-4 grid sm:grid-cols-2 gap-3">
-              <CampoCiudad valor={datos.ciudad} onChange={(v) => set("ciudad", v)} />
+              <CampoCiudad
+                departamento={datos.departamento}
+                municipio={datos.municipio}
+                onDepartamentoChange={(departamento) => {
+                  setError(null);
+                  setDatos((actual) => ({ ...actual, departamento, municipio: "" }));
+                }}
+                onMunicipioChange={(municipio) => set("municipio", municipio)}
+              />
               <label className="block">
                 <span className="text-xs font-bold text-ceniza">Barrio *</span>
                 <input
@@ -238,7 +298,7 @@ export default function CheckoutPage() {
           )}
         </form>
 
-        <GlassPanel solido className="order-1 lg:order-2 p-6 lg:sticky lg:top-20">
+        <GlassPanel solido className="order-2 p-6 lg:sticky lg:top-20">
           <h2 className="text-base font-extrabold">Tu pedido</h2>
           <ul className="mt-4 space-y-3">
             {items.map((item, i) => {
@@ -309,7 +369,7 @@ export default function CheckoutPage() {
       </div>
 
       {/* CTA sticky móvil */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 vidrio-solido border-t border-verde/12 safe-area-pb px-4 pt-3">
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 vidrio-solido border-t border-verde/12 px-4 pt-3 pb-[max(env(safe-area-inset-bottom),0.75rem)]">
         <Boton
           type="submit"
           form="checkout-form"

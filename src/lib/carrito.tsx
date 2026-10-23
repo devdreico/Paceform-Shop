@@ -10,6 +10,7 @@ import {
 } from "react";
 import type { ItemCarrito } from "./tipos";
 import { productos, productoPorSlug } from "@/data/productos";
+import { totalPedido } from "./calculos-pedido";
 
 const CLAVE = "paceform-carrito-v1";
 
@@ -89,14 +90,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const { totalArticulos, subtotal } = useMemo(() => {
     let articulos = 0;
-    let suma = 0;
     for (const item of items) {
       const prod = productoPorSlug(item.productoSlug);
       if (!prod) continue;
       articulos += item.cantidad;
-      suma += prod.precio * item.cantidad;
     }
-    return { totalArticulos: articulos, subtotal: suma };
+    return { totalArticulos: articulos, subtotal: totalPedido(items) };
   }, [items]);
 
   const valor: ContextoCarrito = {
@@ -144,10 +143,7 @@ function formato(v: number) {
 }
 
 export function totalDe(items: ItemCarrito[]) {
-  return items.reduce((acc, item) => {
-    const prod = productoPorSlug(item.productoSlug);
-    return acc + (prod ? prod.precio * item.cantidad : 0);
-  }, 0);
+  return totalPedido(items);
 }
 
 export { productos };

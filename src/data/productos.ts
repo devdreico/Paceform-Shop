@@ -63,7 +63,7 @@ export const productos: Producto[] = [
     descripcionCorta:
       "Zapatilla Adidas Adizero unisex para running, caminata y entrenamiento. Ligera, versátil y con stock real en todas las tallas 37–43.",
     descripcion:
-      "El Adidas Adizero está pensado para quien entrena en serio y también para quien empieza: responde igual en la salida del domingo, en la caminata de la semana o en el gimnasio. Upper en textil importado con interior acolchonado, suela de goma suave y terminación vulcanizada. Ajuste con cordones y plantilla fija. Disponible en 3 presentaciones con foto real, todas las tallas al mismo precio, con stock real.",
+      "El Adidas Adizero está pensado para quien entrena en serio y también para quien empieza: responde igual en la salida del domingo, en la caminata de la semana o en el gimnasio. Upper en textil importado con interior acolchonado, suela de goma suave y terminación vulcanizada. Ajuste con cordones y plantilla fija. Disponible en varias presentaciones, todas las tallas al mismo precio.",
     especificaciones: [
       { etiqueta: "Género", valor: "Unisex" },
       { etiqueta: "Tallas", valor: "37 a 43" },
@@ -92,6 +92,9 @@ export const productos: Producto[] = [
       { nombre: "Gris con negro", hex: "#6B7280", imagen: "/productos/adidas-adizero/gris-negro.webp" },
       { nombre: "Blanco", hex: "#F5F5F5", imagen: "/productos/adidas-adizero/blanco.webp" },
       { nombre: "Blanco tricolor", hex: "#E8E8E8", imagen: "/productos/adidas-adizero/blanco-tricolor.webp" },
+      { nombre: "Azul", hex: "#2563EB" },
+      { nombre: "Negro total", hex: "#111111" },
+      { nombre: "Verde neón", hex: "#84CC16" },
     ],
     disponibilidad: "en-stock",
     imagen: "/productos/adidas-adizero/gris-negro.webp",
@@ -112,7 +115,7 @@ export const productos: Producto[] = [
     descripcionCorta:
       "Tenis On Running Cloudnova: diseño colombiano, tecnología CloudTec y suela importada. Para deporte, caminatas o el día a día.",
     descripcion:
-      "El On Running Cloudnova combina diseño colombiano con tecnología internacional. Malla transpirable y detalles sintéticos dan frescura, ligereza y resistencia. Suela importada con tecnología CloudTec en PVC espanso: estructura segmentada que mejora amortiguación, flexibilidad y estabilidad. Plantilla anatómica acolchada y cierre con cordones modernos. Alto rendimiento con look urbano versátil.",
+      "El On Running Cloudnova Void Eclipse combina diseño colombiano con tecnología internacional. Malla transpirable y detalles sintéticos dan frescura, ligereza y resistencia. Suela importada con tecnología CloudTec en PVC espanso: estructura segmentada que mejora amortiguación, flexibilidad y estabilidad. Plantilla anatómica acolchada y cierre con cordones modernos. Alto rendimiento con look urbano versátil, en tallas 35 a 43 y seis combinaciones de color.",
     especificaciones: [
       { etiqueta: "Origen", valor: "Hecho en Colombia" },
       { etiqueta: "Material", valor: "Malla transpirable + detalles sintéticos" },
@@ -120,6 +123,7 @@ export const productos: Producto[] = [
       { etiqueta: "Plantilla", valor: "Anatómica acolchada" },
       { etiqueta: "Cierre", valor: "Cordones ajustables" },
       { etiqueta: "Uso", valor: "Deporte, caminata y uso diario" },
+      { etiqueta: "Tallas", valor: "35 a 43" },
     ],
     beneficios: [
       "Fabricación nacional con materiales de alta calidad",
@@ -131,9 +135,14 @@ export const productos: Producto[] = [
     porQueElegimos:
       "Una opción hecha en Colombia con tecnología de amortiguación seria, a un precio de entrada muy competitivo para el rendimiento que ofrece.",
     complementarios: ["bolso-fitness-multifuncional", "rinonera-on-cloud"],
-    tallas: [],
+    tallas: ["35", "36", "37", "38", "39", "40", "41", "42", "43"],
     colores: [
-      { nombre: "Void Eclipse Undyed White", hex: "#E8E6E1" },
+      { nombre: "Blanco", hex: "#F5F5F4" },
+      { nombre: "Negro", hex: "#111111" },
+      { nombre: "Gris con amarillo", hex: "#858585" },
+      { nombre: "Gris con rosa", hex: "#A1A1AA" },
+      { nombre: "Negro con blanco", hex: "#171717" },
+      { nombre: "Blanco con rojo", hex: "#F5F5F4" },
     ],
     disponibilidad: "en-stock",
     imagen: "/productos/on-running-cloudnova/main.webp",
